@@ -4319,3 +4319,25 @@ a.post-thumbnail:hover {
 		line-height: 36px;
 	}
 }
+
+/* TEST CHANGES */
+
+
+.movie-link {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.movie-meta {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.movie-meta li{
+	list-style: none;
+}
+
+
+
+
+

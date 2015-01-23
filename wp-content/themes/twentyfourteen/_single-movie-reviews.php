@@ -14,18 +14,31 @@ get_header(); ?>
 
 
 <?php
-	$movie_url = get_field('movie_url');
+	//$movie_url = get_field('movie_url');
 ?>
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
 
-				<?php get_template_part( 'content', 'page' ); ?>
+				<?php
+				// Start the Loop.
+				$key="movie_link";
 
-				<h6 class="movie-link"><a href="<?php echo $movie_url ?>"><?php echo $movie_url; ?></a></h6>
+				while ( have_posts() ) : the_post();
+
+					// Include the page content template.
+					get_template_part( 'content', 'page' ); ?>
+
+					<div class="movie-link">
+					<a href="<?php echo get_post_meta($post->ID, $key, true); ?>">Great movie link that you should click on!</a>
+					</div>	
+
+				<?php endwhile; ?>
+
 
 		</div><!-- #content -->
 	</div><!-- #primary -->
 		<?php get_sidebar( 'content' ); ?>
+
 </div><!-- #main-content -->
 <?php
 get_sidebar();

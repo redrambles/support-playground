@@ -22,6 +22,16 @@ get_header(); ?>
 					 */
 					get_template_part( 'content', get_post_format() );
 
+
+				// Conditional check to see if this is a custom post type 'movie-reviews' (if there is only this addition involved - no need to use another template)
+				if ( is_singular( 'movie-reviews' ) ) { ?>       
+
+					<div class="movie-link">
+					<a href="<?php echo get_post_meta($post->ID, $key, true); ?>"> Great movie link that you should click on!</a>
+					</div>
+
+				<?php }
+
 					// Previous/next post navigation.
 					twentyfourteen_post_nav();
 
