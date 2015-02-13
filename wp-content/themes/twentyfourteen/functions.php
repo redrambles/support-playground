@@ -194,6 +194,15 @@ function twentyfourteen_widgets_init() {
 		'before_title'  => '<h1 class="widget-title">',
 		'after_title'   => '</h1>',
 	) );
+	register_sidebar( array(
+		'name'          => __( 'Test Sidebar', 'twentyfourteen' ),
+		'id'            => 'sidebar-4',
+		'description'   => __( 'Alternative dditional sidebar that appears on the right', 'twentyfourteen' ),
+		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h1 class="widget-title">',
+		'after_title'   => '</h1>',
+	) );
 }
 add_action( 'widgets_init', 'twentyfourteen_widgets_init' );
 
@@ -521,6 +530,7 @@ if ( ! class_exists( 'Featured_Content' ) && 'plugins.php' !== $GLOBALS['pagenow
 //Add Custom Post Types - SUPPORT TEST - January 10th 2015
 // Creates Movie Reviews Custom Post Type
 function movie_reviews_init() {
+
 	$supports = array(
 	'title', // post title
 	'editor', // post content
