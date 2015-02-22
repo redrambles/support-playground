@@ -594,6 +594,32 @@ add_action( 'init', 'movie_create_taxonomies', 0);
 add_filter('widget_text', 'shortcode_unautop'); // This removes any 'forced styling' WP would have included
 add_filter('widget_text', 'do_shortcode');
 
+
+// Add Custom Meta Box
+function movie_create_time_meta_box() {
+	add_meta_box( 'movie_time_metabox', 'Time of the day movie was watched:', 'movie_time', 'movie-reviews', 'normal', 'high' );
+}
+function movie_time($post) { ?>
+	<form action="" method="post">
+		<?php // add nonce for security
+		wp_nonce_field( 'move_metabox_nonce', 'movie_nonce' );
+		//retrieve the metadata values if they exist
+		$movie_watch = get_post_meta( $post->ID, 'Time', true ); ?>
+		<label for "movie_watch">Did you watch the movie in the morning, afternoon or evening?</label>
+		<input type="text" name="movie_watch" value="<?php echo esc_attr($movie_watch);?>"/>
+	</form>
+<?php }
+add_action( 'add_meta_boxes', 'movie_create_time_meta_box');
+
+add_action( 'save_post', 'movie_time_save_meta' );
+function movie_time_save_meta( $post_id ) {
+	if ( isset( $_POST['movie_watch'] ) ) {
+		$new_movie_time_value = ( $_POST['movie_watch'] );
+		update_post_meta( $post_id, 'Time', $new_movie_time_value );
+	}
+}
+
+
 // shortcode: [page_sidebar] Usage example = [page_sidebar id="2" ] 
 function diy_page_in_sidebar($atts, $content=null){
  
