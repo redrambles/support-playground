@@ -541,22 +541,54 @@ function movie_reviews_init() {
 	'comments', // post comments
 	'revisions', // post revisions
 	'post-formats',
+	'page-attributes'
 	);
     $args = array(
       'label' => 'Movie Reviews',
+      'has_archive' => true,
         'public' => true,
         'show_ui' => true,
         'capability_type' => 'post',
-        'hierarchical' => false,
+        'hierarchical' => true,
         'rewrite' => array('slug' => 'movie-reviews'),
         'query_var' => true,
         'menu_icon' => 'dashicons-video-alt',
         'supports' => $supports,
-        );
+    	'taxonomies' => array('post_tag', 'category'),
+    );
     register_post_type( 'movie-reviews', $args );
 }
 add_action( 'init', 'movie_reviews_init' );
 
+
+// Add a Genre taxonomy
+
+//register custom taxonomies
+function movie_create_taxonomies() {
+	//define labels for the taxonomy
+	$labels = array(
+		'name' => __( 'Genre', 'movie' ),
+		'singular-name' => __('Genre', 'movie' ),
+		'search_items' => __( 'Search Genres', 'movie' ),
+		'all_items' => __( 'Parent Genre', 'movie' ),
+		'parent_item_colon' => __(' Parent Genre:', 'movie' ),
+		'edit_item' => __( 'Edit Genre', 'movie' ),
+		'update_item' => __( 'Update Genre', 'movie' ),
+		'add_new_item' => __( 'Add New Genre', 'movie' ),
+		'new_item_name' => __( 'New Genre', 'movie' ),
+		'separate_items_with_commas' => __( 'Separate genres with commas', 'movie' ), //only with non-hierarchical taxonomies
+		'menu_name' => __( 'Genre' ),
+	);
+	register_taxonomy( 'genre', 'movie-reviews', array(
+		'hierarchical' => false,
+		'labels' => $labels,
+		'query_var' => true,
+		'rewrite' => true,
+		'show_admin_column' => true
+		)
+	 );
+}
+add_action( 'init', 'movie_create_taxonomies', 0);
 
 // Enables the use of shortcodes in sidebars - 
 add_filter('widget_text', 'shortcode_unautop'); // This removes any 'forced styling' WP would have included

@@ -1,6 +1,7 @@
 <?php
 /**
  * Template Name: Post List
+ *  THIS IS IN DEVELOPMENT
  */
 
 get_header(); ?>
@@ -48,6 +49,7 @@ get_header(); ?>
 			}
 
 			$postlist = new WP_Query( $args );
+
 			if ( $postlist->have_posts() ) :
 
 				while ( $postlist->have_posts() ) : $postlist->the_post();

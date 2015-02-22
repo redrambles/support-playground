@@ -27,19 +27,31 @@ get_header(); ?>
 				// Conditional check to see if this is a custom post type 'movie-reviews' (if there is only this addition involved - no need to use another template)
 				if ( is_singular( 'movie-reviews' ) ) { ?>       
 
-					<div class="movie-link">
-					<a href="<?php echo get_post_meta($post->ID, $key, true); ?>"> Great movie link that you should click on!</a>
-					</div>
+					<?php 
+					$key = 'movie_link';
+					$themeta = get_post_meta($post->ID, $key, true);
+					if ($themeta != '' ) { ?>
 
-				<?php }
+						<div class="movie-link">
+							<a href="<?php echo get_post_meta($post->ID, $key, true); ?>"> Great movie link that you should click on!</a>
+						</div>
+					
+					<?php } else { ?>
 
-					// Previous/next post navigation.
-					twentyfourteen_post_nav();
+					<div class="entry-content">
+						<h1> HOO YAW </h1>
+					</div>	
+					<?php } 
+				}
 
-					// If comments are open or we have at least one comment, load up the comment template.
-					if ( comments_open() || get_comments_number() ) {
-						comments_template();
-					}
+				// Previous/next post navigation.
+				twentyfourteen_post_nav();
+
+				// If comments are open or we have at least one comment, load up the comment template.
+				if ( comments_open() || get_comments_number() ) {
+					comments_template();
+				}
+				
 				endwhile;
 			?>
 		</div><!-- #content -->
