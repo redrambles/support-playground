@@ -28,19 +28,32 @@ get_header(); ?>
 				if ( is_singular( 'movie-reviews' ) ) { ?>       
 
 					<?php 
-					$key = 'movie_link';
-					$themeta = get_post_meta($post->ID, $key, true);
-					if ($themeta != '' ) { ?>
+					$movie_link = 'movie_link';
+					$movie_watch = 'Time';
+					$themeta = get_post_meta($post->ID, $movie_link, true);
+					$themeta2 = get_post_meta($post->ID, $movie_watch, true);
 
-						<div class="movie-link">
-							<a href="<?php echo get_post_meta($post->ID, $key, true); ?>"> Great movie link that you should click on!</a>
+					if ( !empty ( $themeta ) ) { ?>
+
+						<div class="movie-link entry-content">
+							<a href="<?php echo get_post_meta($post->ID, $movie_link, true); ?>"> Great movie link that you should click on!</a>
 						</div>
 					
 					<?php } else { ?>
 
 					<div class="entry-content">
-						<h1> HOO YAW </h1>
-					</div>	
+						<p>I watched a secret movie. I can't tell you what it is. <br>No, not THAT kind.</p>
+					</div>
+
+					<?php } 
+
+
+					if ( !empty ( $themeta2 ) ) { ?>
+
+						<div class="entry-content">
+							<p>I watched the movie in the <?php echo get_post_meta($post->ID, $movie_watch, true); ?>.</p>
+						</div>
+
 					<?php } 
 				}
 
@@ -51,7 +64,7 @@ get_header(); ?>
 				if ( comments_open() || get_comments_number() ) {
 					comments_template();
 				}
-				
+
 				endwhile;
 			?>
 		</div><!-- #content -->
