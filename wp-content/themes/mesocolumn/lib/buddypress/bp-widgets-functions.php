@@ -9,22 +9,22 @@ BuddyPress Custom Widget
 class My_THEME_BP_Searchform_Widget extends WP_Widget {
 function My_THEME_BP_Searchform_Widget() {
 //Constructor
-parent::WP_Widget(false, $name = TEMPLATE_DOMAIN . ' | BuddyPress Search', array(
-'description' => __('Displays your BuddyPress Directory Search.', TEMPLATE_DOMAIN)
+parent::WP_Widget(false, $name = __('BuddyPress Search', 'mesocolumn'), array(
+'description' => __('Displays your BuddyPress Directory Search.', 'mesocolumn')
 ));
 }
 function widget($args, $instance) {
 // outputs the content of the widget
 extract($args); // Make before_widget, etc available.
-$bps_name = empty($instance['title']) ? __('BuddyPress Search', TEMPLATE_DOMAIN) : apply_filters('widget_title', $instance['title']);
+$bps_name = empty($instance['title']) ? __('BuddyPress Search', 'mesocolumn') : apply_filters('widget_title', $instance['title']);
 $unique_id = $args['widget_id'];
 echo $before_widget;
 echo $before_title . $bps_name . $after_title; ?>
 <?php do_action( 'bp_before_blog_search_form' ) ?>
 <form action="<?php echo bp_search_form_action() ?>" class="bp-searchform" method="post" id="search-form">
-<input type="text" id="search-terms" name="search-terms" onfocus="if (this.value == '<?php _e( 'Start Searching...', TEMPLATE_DOMAIN ) ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e( 'Start Searching...', TEMPLATE_DOMAIN ) ?>';}" />
+<input type="text" id="search-terms" name="search-terms" onfocus="if (this.value == '<?php _e( 'Start Searching...', 'mesocolumn' ) ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e( 'Start Searching...', 'mesocolumn' ) ?>';}" />
 <?php echo bp_search_form_type_select() ?>
-&nbsp;<input type="submit" name="search-submit" id="search-submit" value="<?php _e('Search', TEMPLATE_DOMAIN) ?>" />
+&nbsp;<input type="submit" name="search-submit" id="search-submit" value="<?php _e('Search', 'mesocolumn') ?>" />
 <?php wp_nonce_field( 'bp_search_form' ) ?>
 <?php do_action( 'bp_blog_search_form' ) ?>
 </form>
@@ -41,7 +41,7 @@ function form($instance) {
 $bps_name = $instance['title'];
 ?>
 <p>
-<label for="<?php echo $this->get_field_id('title'); ?>"><?php  _e('Name',TEMPLATE_DOMAIN); ?>:</label>
+<label for="<?php echo $this->get_field_id('title'); ?>"><?php  _e('Name','mesocolumn'); ?>:</label>
 <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" class="widefat" value="<?php echo $bps_name; ?>" /></p>
 <?php }
 }
@@ -61,7 +61,7 @@ $sql_fetch_group = $wpdb->get_results($fetch_group); ?>
 <ul class="random-groups item-list group-in-<?php echo $block_id; ?>">
 
 <?php
-$no_avatar = get_template_directory_uri() . '/_inc/images/default.png';
+$no_avatar = 'http://www.gravatar.com/avatar';
 foreach($sql_fetch_group as $group_fe) {
 $avatar_full = bp_core_fetch_avatar( 'item_id=' . $group_fe->id . '&class=avatar&object=group&type=' . $type . '&width=' . $size . '&height=' . $size );
 $group_description = stripslashes($group_fe->description);
@@ -93,14 +93,14 @@ $group_description = stripslashes($group_fe->description);
 class My_THEME_BP_Random_Groups_Widget extends WP_Widget {
 function My_THEME_BP_Random_Groups_Widget() {
 //Constructor
-parent::WP_Widget(false, $name = TEMPLATE_DOMAIN . ' | Random Groups', array(
-'description' => __('Displays your BuddyPress Groups Randomly.', TEMPLATE_DOMAIN)
+parent::WP_Widget(false, $name = __('BuddyPress Random Groups', 'mesocolumn'), array(
+'description' => __('Displays your BuddyPress Groups Randomly.', 'mesocolumn')
 ));
 }
 function widget($args, $instance) {
 // outputs the content of the widget
 extract($args); // Make before_widget, etc available.
-$rg_name = empty($instance['title']) ? __('BuddyPress Random Groups', TEMPLATE_DOMAIN) : apply_filters('widget_title', $instance['title']);
+$rg_name = empty($instance['title']) ? __('BuddyPress Random Groups', 'mesocolumn') : apply_filters('widget_title', $instance['title']);
 $unique_id = $args['widget_id'];
 
 echo $before_widget;
@@ -119,12 +119,10 @@ function form($instance) {
 $rg_name = $instance['title'];
 ?>
 <p>
-<label for="<?php echo $this->get_field_id('title'); ?>"><?php  _e('Name',TEMPLATE_DOMAIN); ?>:</label>
+<label for="<?php echo $this->get_field_id('title'); ?>"><?php  _e('Name','mesocolumn'); ?>:</label>
 <input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" class="widefat" value="<?php echo $rg_name; ?>" /></p>
 <?php } }
 register_widget('My_THEME_BP_Random_Groups_Widget');
 }
-
-
 
 ?>

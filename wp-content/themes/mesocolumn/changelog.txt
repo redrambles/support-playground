@@ -1,6 +1,25 @@
 /////////////////////////////////////////
 //changelog
 /////////////////////////////////////////
+v1.6.4.1
+- fixed woocommerce function error after update woocommerce v2.3.2
+
+v1.6.4
+- replace TEMPLATE_DOMAIN language string to theme slug 'mesocolumn' for theme submit guideline
+- separate responsive css with style css
+- fixed margin error for left and right in larger browser size
+- add ins background transparent style to remove yellow background
+- featured slider with post ID now support all custom post type
+- cache category color for query optimization
+- updated superfish js and css to latest version
+- added font weight for font options
+- added thumbnail, medium or large featured image option for blog and archive list
+- added default blog or magazine style for blog post
+- added image size option for featured category homepage
+- added options to enable or disable built-in schema.org markup
+- added options to enable or disable responsiveness
+
+
 v1.6.3
 - Added microformat
 - Fixed Ads Right Widget Shortcode issue

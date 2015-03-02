@@ -8,9 +8,12 @@ $sponsor_banner6 = get_theme_option('sponsor_banner_six');
 ?>
 
 <?php if(!$sponsor_banner1 && !$sponsor_banner2 && !$sponsor_banner3 && !$sponsor_banner4 && !$sponsor_banner5 && !$sponsor_banner6): ?>
-<?php else: ?>
+<?php
+else:
+$adheadertext = apply_filters('meso_adheader_text', 'Advertisement');
+?>
 <aside id="sponsorbox" class="widget">
-<h3 class="widget-title"><?php _e('Advertisement', TEMPLATE_DOMAIN); ?></h3>
+<h3 class="widget-title"><?php printf( __( '%1$s', 'mesocolumn' ), $adheadertext ); ?></h3>
 <div id="sponsorlinks">
 
 <?php if($sponsor_banner1 == '') { ?>

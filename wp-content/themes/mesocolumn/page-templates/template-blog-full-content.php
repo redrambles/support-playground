@@ -8,19 +8,28 @@ Template Name: Blog Full Content
 
 <?php do_action( 'bp_before_content' ); ?>
 <!-- CONTENT START -->
-<div class="content">
+<div class="content blog-full-content">
 <div class="content-inner">
 
 <?php do_action( 'bp_before_blog_home' ); ?>
 
 <!-- POST ENTRY START -->
 <div id="post-entry">
-<section class="post-entry-inner">
+<div class="post-entry-inner">
+
+<?php do_action( 'bp_before_blog_entry' ); ?>
 
 <?php
-global $more; $more = 0;
+global $page,$paged,$more; $more = 0;
 $max_num_post = get_option('posts_per_page');
-$page = (get_query_var('paged')) ? get_query_var('paged') : 1; query_posts("cat=&showposts=$max_num_post&paged=$page");
+
+if('page' == get_option( 'show_on_front' )) {
+$page = (get_query_var('page')) ? get_query_var('page') : 1;
+} else {
+$page = (get_query_var('paged')) ? get_query_var('paged') : 1;
+}
+
+query_posts("posts_per_page=$max_num_post&paged=$page");
 $oddpost = 'alt-post'; $postcount = 1;
 if (have_posts()) : while ( have_posts() ) : the_post(); ?>
 
@@ -34,7 +43,7 @@ if (have_posts()) : while ( have_posts() ) : the_post(); ?>
 
 <?php do_action( 'bp_before_post_content' ); ?>
 <div class="post-content">
-<div class="entry-content"><?php the_content( __('...Continue reading', TEMPLATE_DOMAIN) ); ?></div>
+<div class="entry-content"><?php the_content( __('...Continue reading', 'mesocolumn') ); ?></div>
 </div>
 <?php do_action( 'bp_after_post_content' ); ?>
 
@@ -42,22 +51,6 @@ if (have_posts()) : while ( have_posts() ) : the_post(); ?>
 <!-- POST END -->
 
 <?php do_action( 'bp_after_blog_post' ); ?>
-
-<?php
-$get_ads_code_one = get_theme_option('ads_code_one');
-$get_ads_code_two = get_theme_option('ads_code_two');
-if( $get_ads_code_one == '' && $get_ads_code_two == '') { ?>
-<?php } else { ?>
-<?php if( 2 == $postcount ){ ?>
-<div class="adsense-post">
-<?php echo stripcslashes(do_shortcode($get_ads_code_one)); ?>
-</div>
-<?php } elseif( 4 == $postcount ){ ?>
-<div class="adsense-post">
-<?php echo stripcslashes(do_shortcode($get_ads_code_two)); ?>
-</div>
-<?php } ?>
-<?php } ?>
 
 <?php ($oddpost == "alt-post") ? $oddpost="" : $oddpost="alt-post"; $postcount++; ?>
 
@@ -70,7 +63,9 @@ if( $get_ads_code_one == '' && $get_ads_code_two == '') { ?>
 <?php endif; ?>
 
 <?php get_template_part( 'lib/templates/paginate' ); ?>
-</section>
+
+<?php do_action( 'bp_after_blog_entry' ); ?>
+</div>
 </div>
 <!-- POST ENTRY END -->
 

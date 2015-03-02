@@ -5,8 +5,8 @@ if( !function_exists( 'dez_get_my_custom_search_form' )):
 ///////////////////////////////////////////////////////////////////
 function dez_get_my_custom_search_form() { ?>
 <form role="search" method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
-<div><label class="screen-reader-text" for="s"><?php _e('Search for:', TEMPLATE_DOMAIN); ?></label>
-<input type="text" id="s" name="s" value="<?php _e('Type and Press Enter', TEMPLATE_DOMAIN); ?>" onfocus="if (this.value == '<?php _e('Type and Press Enter', TEMPLATE_DOMAIN); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e('Type and Press Enter', TEMPLATE_DOMAIN); ?>';}" tabindex="1" /></div></form>
+<div><label class="screen-reader-text" for="s"><?php _e('Search for:', 'mesocolumn'); ?></label>
+<input type="text" id="s" name="s" value="<?php _e('Type and Press Enter', 'mesocolumn'); ?>" onfocus="if (this.value == '<?php _e('Type and Press Enter', 'mesocolumn'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e('Type and Press Enter', 'mesocolumn'); ?>';}" tabindex="1" /></div></form>
 <?php }
 endif;
 
@@ -18,17 +18,29 @@ if ( ! function_exists( 'dez_mp_theme_wp_title' ) ) :
 ///////////////////////////////////////////////////////////////////////////////////////
 function dez_mp_theme_wp_title( $title, $sep ) {
 global $paged, $page;
-if ( is_feed() )
-return $title;
-// Add the site name.
-$title .= get_bloginfo( 'name' );
-// Add the site description for the home/front page.
+$site_title = get_bloginfo( 'name' );
+$post_title = the_title_attribute('echo=0');
 $site_description = get_bloginfo( 'description', 'display' );
-if ( $site_description && ( is_home() || is_front_page() ) )
-$title = "$title $sep $site_description";
-// Add a page number if necessary.
-if ( $paged >= 2 || $page >= 2 )
-$title = "$title $sep " . sprintf( __( 'Page %s', TEMPLATE_DOMAIN ), max( $paged, $page ) );
+$sep = '&raquo;';
+if ( is_feed() ) {
+$title = $site_title;
+} elseif ( $site_description && ( is_home() || is_front_page() ) ) {
+$title = "$site_title $sep $site_description";
+} elseif ( $paged >= 2 || $page >= 2 ) {
+$title = "$site_title $sep " . sprintf( __( 'Page %s', 'mesocolumn' ), max( $paged, $page ) );
+} elseif ( is_category() || is_tag() ) {
+$title = ucfirst(single_cat_title('',false)) . ' ' . $sep . ' ' . $site_title;
+} elseif ( is_singular() ) {
+$title = "$post_title $sep $site_title";
+} else {
+if ( is_day() ) {
+$title = __('Archives for ', 'mesocolumn') . get_the_date() . ' ' . $sep . ' ' . $site_title;
+} else if ( is_month() ) {
+$title = __('Archives for ', 'mesocolumn') . get_the_date('F Y') . ' ' . $sep . ' ' . $site_title;
+} else if ( is_year() ){
+$title = __('Archives for ', 'mesocolumn') . get_the_date('Y') . ' ' . $sep . ' ' . $site_title;
+}
+}
 return $title;
 }
 //disable if all-in-one-seo and yoast seo plugin installed
@@ -65,8 +77,8 @@ return;
 			'total' => $max_num_pages,
 			'current' => $current,
 			'prev_next' => true,
-			'prev_text' => __( '&laquo; Previous', TEMPLATE_DOMAIN ), // Translate in WordPress. This is the default.
-			'next_text' => __( 'Next &raquo;', TEMPLATE_DOMAIN ), // Translate in WordPress. This is the default.
+			'prev_text' => __( '&laquo; Previous', 'mesocolumn' ), // Translate in WordPress. This is the default.
+			'next_text' => __( 'Next &raquo;', 'mesocolumn' ), // Translate in WordPress. This is the default.
 			'show_all' => false,
 			'end_size' => 1,
 			'mid_size' => 1,
@@ -185,9 +197,6 @@ echo "</div>\n";
 }
 
 
-
-
-
 if( !class_exists('Custom_Description_Walker') ):
 ////////////////////////////////////////////////////////////////////
 // add description to wp_nav
@@ -224,10 +233,8 @@ $catname_val = '';
 $pagename_val = '';
 if($depth == 0 ):
 
-$catname = $item->title;
-$catname = str_replace('&', '&amp;', $catname);
+$cat_id = get_post_meta( $item->ID, '_menu_item_object_id', true );
 
-$cat_id = get_cat_ID($catname);
 if( !$cat_id ) {
 if( class_exists('woocommerce') || class_exists('jigoshop') ) {
 $cat_name = get_term_by('name', $catname, 'product_cat');
@@ -244,8 +251,7 @@ $catname_val = ( !empty($cat_bg_color) ) ? "tn_cat_color_" . $cat_id : "";
 }
 
 
-$get_page_id = get_page_by_title($catname);
-$page_id = isset( $get_page_id->ID ) ? $get_page_id->ID : "";
+$page_id = get_post_meta( $item->ID, '_menu_item_object_id', true ); 
 
 if($page_id) {
 $page_value_option = 'tn_page_color_' . $page_id;
@@ -377,8 +383,9 @@ function dez_get_mobile_navigation($type='', $nav_name='') {
 </script>
 SCRIPT;
 echo $js;
+$mobile_default_text = apply_filters('meso_mobilemenu_text',__('Where to?', 'mesocolumn'));
 echo "<select name=\"{$id}\" id=\"{$id}\">";
-echo "<option>" . __('Where to?', TEMPLATE_DOMAIN) . "</option>"; ?>
+echo "<option>" . $mobile_default_text . "</option>"; ?>
 <?php echo dez_get_wp_custom_mobile_nav_menu($get_custom_location=$nav_name, $get_default_menu='dez_revert_wp_mobile_menu_page'); ?>
 <?php echo "</select>"; }
 
@@ -413,7 +420,7 @@ $sql = "SELECT DISTINCT ID, post_title, post_password, comment_ID,
 comment_post_ID, comment_author, comment_author_email, comment_date_gmt, comment_approved,
 comment_type,comment_author_url, SUBSTRING(comment_content,1,50) AS com_excerpt FROM $wpdb->comments
 LEFT OUTER JOIN $wpdb->posts ON ($wpdb->comments.comment_post_ID =
-$wpdb->posts.ID) WHERE comment_approved = '1' AND comment_type = '' AND
+$wpdb->posts.ID) WHERE post_type IN ('post','page') AND comment_approved = '1' AND comment_type = '' AND
 post_password = '' ORDER BY comment_date_gmt DESC LIMIT " . $limit;
 echo '<ul class="gravatar_recent_comment">';
 $comments = $wpdb->get_results($sql);
@@ -423,15 +430,14 @@ $gravatar_status = 'on'; /* off if not using */
 foreach ($comments as $comment) {
 $grav_email = $comment->comment_author_email;
 $grav_name = $comment->comment_author;
-$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=".md5($grav_email). "&amp;size=32"; ?>
-
+$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=".md5($grav_email). "&amp;size=32";
+$comtext = strip_tags($comment->com_excerpt);
+?>
 <li>
-<?php if($gravatar_status == 'on') { ?>
-<?php echo get_avatar( $grav_email, '120'); ?>
-<?php } ?>
+<?php if($gravatar_status == 'on') { echo get_avatar( $grav_email, '120'); } ?>
 <div class="gravatar-meta">
 <span class="author"><span class="aname"><?php echo strip_tags($comment->comment_author); ?></span> - </span>
-<span class="comment"><a href="<?php echo get_permalink($comment->ID); ?>#comment-<?php echo $comment->comment_ID; ?>" title="<?php __('on', TEMPLATE_DOMAIN); ?> <?php echo strip_tags($comment->post_title); ?>"><?php echo strip_tags($comment->com_excerpt); ?>...</a></span>
+<span class="comment"><a href="<?php echo get_comment_link($comment->comment_ID); ?>" title="<?php _e('Comment on', 'mesocolumn'); ?> <?php echo strip_tags($comment->post_title); ?>"><?php echo $comtext; ?>...</a></span>
 </div>
 </li>
 <?php
@@ -490,19 +496,38 @@ return $text;
 ////////////////////////////////////////////////////////////////////////////////
 // excerpt the_content()
 ////////////////////////////////////////////////////////////////////////////////
-function dez_get_custom_the_excerpt($limit) {
-if($limit == '' || $limit == '0') {
-  } else {
-  $excerpt = explode(' ', get_the_excerpt(), $limit);
-if (count($excerpt)>=$limit) {
-    array_pop($excerpt);
-    $excerpt = implode(" ",$excerpt).'...';
-  } else {
-    $excerpt = implode(" ",$excerpt).'...';  
-  }
+function dez_get_custom_the_excerpt($limit='',$more='') {
+$excerpt = explode(' ', get_the_excerpt(), $limit);
+$thepostlink = '<a class="readmore" href="'. get_permalink() . '" title="' . the_title_attribute('echo=0') . '">';
+  //remove caption tag
   $excerpt = preg_replace('`\[[^\]]*\]`','',$excerpt);
-  return $excerpt;
+
+  //remove email tag
+  $pattern = "/[^@\s]*@[^@\s]*\.[^@\s]*/";
+  $replacement = "";
+  $excerpt = preg_replace($pattern, $replacement, $excerpt);
+
+  //remove link url tag
+  $pattern = "/[a-zA-Z]*[:\/\/]*[A-Za-z0-9\-_]+\.+[A-Za-z0-9\.\/%&=\?\-_]+/i";
+  $replacement = "";
+  $excerpt = preg_replace($pattern, $replacement, $excerpt);
+
+  if (count($excerpt)>=$limit) {
+    array_pop($excerpt);
+
+    if($more) {
+    $excerpt = implode(" ",$excerpt).'...'. $thepostlink.$more.'</a>';
+    } else {
+    $excerpt = implode(" ",$excerpt).'...';
+    }
+
+
+  } else {
+    $excerpt = implode(" ",$excerpt);
   }
+
+
+  return $excerpt;
 }
 
 function dez_get_custom_the_content($limit) {
@@ -519,6 +544,29 @@ global $id, $post;
   $content = str_replace(']]>', ']]&gt;', $content);
   $content = strip_tags($content, '<p>');
   return $content;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// get first attachment image
+////////////////////////////////////////////////////////////////////////////////
+function dez_echo_first_image( $id='', $size='' ) {
+$args = array(
+		'numberposts' => 1,
+		'order' => 'ASC',
+		'post_mime_type' => 'image',
+		'post_parent' => $id,
+		'post_status' => null,
+		'post_type' => 'attachment',
+	);
+	$attachments = get_children( $args );
+
+	if ( $attachments ) {
+	foreach ( $attachments as $attachment ) {
+    $image_attributes = wp_get_attachment_image_src( $attachment->ID, $size );
+    return $image_attributes[0];
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -575,16 +623,36 @@ $import_img = dez_get_image_src($swt_post_thumb);
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $import_img . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 
 else:
+
 if( has_post_thumbnail( $post->ID ) ) {
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $image_url . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
+
 } else {
+
+/* check image attach or uploaded to post */
+$images = dez_echo_first_image( $post->ID, $size );
+
+if($images) {
+
+return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $images . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
+
+} else {
+
 if($first_img) {
+
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $first_img . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
-} else {
+
+}  else  {
+
+/* if true, default image is set */
 if($default == 'true'):
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . get_template_directory_uri() . '/images/post-default.png' . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 endif;
+
+
 }
+}
+
 }
 endif;
 
@@ -617,9 +685,22 @@ $import_img = dez_get_image_src($swt_post_thumb);
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $import_img . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 
 else:
+
 if( has_post_thumbnail( $post->ID ) ) {
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $image_url . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
+
 } else {
+
+
+/* check image attach or uploaded to post */
+$images = dez_echo_first_image( $post->ID, $size );
+
+if($images) {
+
+return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $images . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
+
+} else {
+
 if($first_img) {
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $first_img . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 } else {
@@ -627,6 +708,10 @@ if($default == 'true'):
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . get_template_directory_uri() . '/images/slider-default.png' . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 endif;
 }
+
+}
+
+
 }
 endif;
 
@@ -659,7 +744,11 @@ $first_img = $matches[1][0];
 } else {
 $first_img = '';
 }
-if( has_post_thumbnail($post->ID) || !empty($first_img) || !empty($swt_post_thumb) ) {
+
+/* check image attach or uploaded to post */
+$upload_images = dez_echo_first_image( $post->ID, 'thumbnail' );
+
+if( has_post_thumbnail($post->ID) || !empty($first_img) || !empty($swt_post_thumb) || !empty($upload_images) ) {
 $classes[] = 'has_thumb';
 } else {
 $classes[] = 'has_no_thumb';
@@ -684,7 +773,10 @@ $first_img = $matches[1][0];
 } else {
 $first_img = '';
 }
-if( has_post_thumbnail($post->ID) || !empty($first_img) || !empty($swt_post_thumb) ) {
+/* check image attach or uploaded to post */
+$upload_images = dez_echo_first_image( $post->ID, 'thumbnail' );
+
+if( has_post_thumbnail($post->ID) || !empty($first_img) || !empty($swt_post_thumb) || !empty($upload_images) ) {
 $output = 'has_thumb';
 } else {
 $output = 'has_no_thumb';
@@ -709,15 +801,15 @@ $GLOBALS['comment'] = $comment;
 <?php } ?>
 <div class="comment-author vcard">
 <div class="comment-post-meta">
-<cite class="fn"><?php comment_author_link() ?></cite> <span class="says">-</span> <small><a href="#comment-<?php comment_ID() ?>"><?php comment_date(__('F jS, Y', TEMPLATE_DOMAIN)) ?> <?php _e("at",TEMPLATE_DOMAIN); ?> <?php comment_time() ?>
+<cite class="fn"><?php comment_author_link() ?></cite> <span class="says">-</span> <small><a href="#comment-<?php comment_ID() ?>"><?php comment_date(__('F jS, Y', 'mesocolumn')) ?> <?php _e("at",'mesocolumn'); ?> <?php comment_time() ?>
 </a></small>
-<span class="meta-no-display"><cite class="org"><?php _e('none', TEMPLATE_DOMAIN); ?></cite><cite class="role">
-<?php printf( __( 'Comment author #%1$s on %2$s by %3$s', TEMPLATE_DOMAIN ), get_comment_ID(),the_title_attribute('echo=0'), get_bloginfo('name') ); ?></cite>
+<span class="meta-no-display"><cite class="org"><?php _e('none', 'mesocolumn'); ?></cite><cite class="role">
+<?php printf( __( 'Comment author #%1$s on %2$s by %3$s', 'mesocolumn' ), get_comment_ID(),the_title_attribute('echo=0'), get_bloginfo('name') ); ?></cite>
 </span>
 </div>
 <div id="comment-text-<?php comment_ID(); ?>" class="comment_text">
 <?php if ($comment->comment_approved == '0') : ?>
-<em><?php _e('Your comment is awaiting moderation.', TEMPLATE_DOMAIN); ?></em>
+<em><?php _e('Your comment is awaiting moderation.', 'mesocolumn'); ?></em>
 <?php endif; ?>
 <?php comment_text() ?>
 <div class="reply">
@@ -746,7 +838,6 @@ $query->set('post_type', 'post');
 }
 return $query;
 }
-
 //add_filter('pre_get_posts','dez_remove_page_search_filter');
 
 
@@ -764,7 +855,7 @@ if($link == 'false'):
 $single_cat = $category[0]->name;
 return $single_cat;
 else:
-$single_cat .= '<a rel="category tag" href="' . get_category_link( $category[0]->term_id ) . '" title="' . sprintf( __( "View all posts in %s", TEMPLATE_DOMAIN ), $category[0]->name ) . '" ' . '>';
+$single_cat .= '<a rel="category tag" href="' . get_category_link( $category[0]->term_id ) . '" title="' . sprintf( __( "View all posts in %s", 'mesocolumn' ), $category[0]->name ) . '" ' . '>';
 $single_cat .= $category[0]->name;
 $single_cat .= '</a>';
 return $single_cat;
@@ -812,24 +903,24 @@ if( !function_exists('dez_get_wp_comment_count') ) :
 function dez_get_wp_comment_count($type = ''){ //type = comments, pings,trackbacks, pingbacks
         if($type == 'comments'):
                 $typeSql = 'comment_type = ""';
-                $oneText = __('One comment', TEMPLATE_DOMAIN);
-                $moreText = __('% comments', TEMPLATE_DOMAIN);
-                $noneText = __('No Comments', TEMPLATE_DOMAIN);
+                $oneText = __('One comment', 'mesocolumn');
+                $moreText = __('% comments', 'mesocolumn');
+                $noneText = __('No Comments', 'mesocolumn');
         elseif($type == 'pings'):
                 $typeSql = 'comment_type != ""';
-                $oneText = __('One pingback/trackback', TEMPLATE_DOMAIN);
-                $moreText = __('% pingbacks/trackbacks', TEMPLATE_DOMAIN);
-                $noneText = __('No pinbacks/trackbacks', TEMPLATE_DOMAIN);
+                $oneText = __('One pingback/trackback', 'mesocolumn');
+                $moreText = __('% pingbacks/trackbacks', 'mesocolumn');
+                $noneText = __('No pinbacks/trackbacks', 'mesocolumn');
         elseif($type == 'trackbacks'):
                 $typeSql = 'comment_type = "trackback"';
-                $oneText = __('One trackback', TEMPLATE_DOMAIN);
-                $moreText = __('% trackbacks', TEMPLATE_DOMAIN);
-                $noneText = __('No trackbacks', TEMPLATE_DOMAIN);
+                $oneText = __('One trackback', 'mesocolumn');
+                $moreText = __('% trackbacks', 'mesocolumn');
+                $noneText = __('No trackbacks', 'mesocolumn');
         elseif($type == 'pingbacks'):
                 $typeSql = 'comment_type = "pingback"';
-                $oneText = __('One pingback', TEMPLATE_DOMAIN);
-                $moreText = __('% pingbacks', TEMPLATE_DOMAIN);
-                $noneText = __('No pingbacks', TEMPLATE_DOMAIN);
+                $oneText = __('One pingback', 'mesocolumn');
+                $moreText = __('% pingbacks', 'mesocolumn');
+                $noneText = __('No pingbacks', 'mesocolumn');
         endif;
 global $wpdb;
 $result = $wpdb->get_var('SELECT COUNT(comment_ID) FROM '. $wpdb->prefix . 'comments WHERE '. $typeSql . ' AND comment_approved="1" AND comment_post_ID= '.get_the_ID());
@@ -887,7 +978,7 @@ if( !function_exists( 'dez_posts_columns_id' ) ):
 // add ID column to posts in admins
 /////////////////////////////////////////////////////////////////////////////
 function dez_posts_columns_id($defaults){
-$defaults['wps_post_id'] = __('ID', TEMPLATE_DOMAIN);
+$defaults['wps_post_id'] = __('ID', 'mesocolumn');
 return $defaults;
 }
 function dez_posts_custom_id_columns($column_name, $id){
@@ -948,10 +1039,11 @@ return $ptype;
 // change the excerpt length limit
 ////////////////////////////////////////////////////////////////////////////////
 function dez_custom_excerpt_length($length) {
-if(get_theme_option('post_custom_excerpt')) {
-return 255;
+$myexcerpt = get_theme_option('post_custom_excerpt');
+if($myexcerpt) {
+return $myexcerpt;
 } else {
-return 35;
+return 30;
 }
 }
 add_filter('excerpt_length', 'dez_custom_excerpt_length');
@@ -967,13 +1059,14 @@ global $authordata;
 // if you simply want to add something to the existing link, use ".=" instead of "=" for $link
     $link = sprintf(
         '<a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a>',
-        get_author_posts_url( $authordata->ID, $authordata->user_nicename ),
-        esc_attr( sprintf( __( 'Posts by %s', TEMPLATE_DOMAIN ), get_the_author() ) ),
+        get_author_posts_url( $authordata->ID, $authordata->nickname ),
+        esc_attr( sprintf( __( 'Posts by %s', 'mesocolumn' ), get_the_author() ) ),
         get_the_author()
     );
 return $link;
 }
 add_filter( 'the_author_posts_link', 'dez_add_hatom_author_entry' );
 }
+
 
 ?>

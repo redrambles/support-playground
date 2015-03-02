@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]>	<html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>		<html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>		<html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>		<html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if lt IE 7 ]>	<html <?php language_attributes(); ?> class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>		<html <?php language_attributes(); ?> class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>		<html <?php language_attributes(); ?> class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>		<html <?php language_attributes(); ?> class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
 <html <?php language_attributes(); ?> class="no-js"> <!--<![endif]-->
 <head>
-
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
+
+<!-- Title now generate from add_theme_support('title-tag') -->
 
 <?php if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) { echo '<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">'; } ?>
 
@@ -15,14 +16,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes">
 <meta name="HandheldFriendly" content="true">
 <?php } ?>
-
-<link rel="profile" href="http://gmpg.org/xfn/11">
-
-<?php do_action( 'bp_head_before_title' ); ?>
-
-<title><?php wp_title( '|', true, 'right' ); ?></title>
-
-<?php do_action( 'bp_head_after_title' ); ?>
 
 <!-- STYLESHEET INIT -->
 <link href="<?php bloginfo('stylesheet_url'); ?>" rel="stylesheet" type="text/css" />
@@ -60,43 +53,26 @@ if( $get_fav_icon ) { ?><link rel="icon" href="<?php echo $get_fav_icon; ?>" typ
 
 <?php do_action( 'bp_before_container' ); ?>
 <!-- CONTAINER START -->
-<section id="container">
+<div id="container">
 
 <?php do_action( 'bp_before_top_nav' ); ?>
-<nav class="top-nav iegradient effect-1" id="top-navigation" role="navigation">
+<nav class="top-nav iegradient effect-1" id="top-navigation" role="navigation"<?php do_action('bp_section_nav'); ?>>
 <div class="innerwrap">
-
 <?php wp_nav_menu( array( 'theme_location' => 'top', 'container' => false, 'menu_class' => 'sf-menu', 'fallback_cb' => 'mesocolumn_revert_wp_menu_page','walker' => new Custom_Description_Walker )); ?>
-
 <?php do_action( 'bp_inside_top_nav' ); ?>
-
-<div id="mobile-nav">
-<?php if ( has_nav_menu( 'top' ) ) {  ?>
-<p class="select-pri">
-<?php _e('Select Page:', TEMPLATE_DOMAIN); ?> <?php dez_get_mobile_navigation( $type='top', $nav_name="top" ); ?>
-</p>
-<?php } ?>
-
-<?php if ( has_nav_menu( 'primary' ) ) {  ?>
-<p class="select-pri sec">
-<?php _e('Select Category:', TEMPLATE_DOMAIN); ?> <?php dez_get_mobile_navigation( $type='main', $nav_name="primary" ); ?>
-</p>
-<?php } ?>
-</div>
-
 </div>
 </nav>
 <?php do_action( 'bp_after_top_nav' ); ?>
 
-<?php do_action( 'bp_before_header' ); ?>
+<?php do_action( 'bp_before_header' );
+$header_overlay = get_theme_mod('custom_header_overlay');
+?>
 <!-- HEADER START -->
-<header class="iegradient" id="header" role="banner">
-
-<div id="header-overlay" class="header-inner">
+<header class="iegradient <?php echo strtolower($header_overlay).'_head'; ?>" id="header" role="banner"<?php do_action('bp_section_header'); ?>>
+<div class="header-inner">
 <div class="innerwrap">
-
-<div<?php $header_overlay = get_theme_mod('custom_header_overlay'); if( get_header_image() && $header_overlay == 'Yes' ): ?> class="header-overlay-on"<?php endif; ?> id="siteinfo">
-
+<div id="siteinfo">
+<?php do_action( 'bp_before_site_title' ); ?>
 <?php
 $get_header_logo =  get_theme_option('header_logo');
 if( $get_header_logo  ) { ?>
@@ -107,32 +83,29 @@ if( $get_header_logo  ) { ?>
 <?php } else { ?>
 <<?php if( !is_singular() || is_page_template('page-templates/template-blog.php') ){ echo 'h1 '; } else { echo 'div '; } ?>><a href="<?php echo home_url( '/' ); ?>" title="<?php echo bloginfo('name'); ?>" rel="home"><?php bloginfo( 'name' ); ?></a><<?php if( !is_singular() || is_page_template('page-templates/template-blog.php') ){ echo '/h1 '; } else { echo '/div '; } ?>><p id="site-description"><?php echo bloginfo('description'); ?></p>
 <?php } ?>
-
+<?php do_action( 'bp_after_site_title' ); ?>
 </div>
 <!-- SITEINFO END -->
-
-
 <?php $header_banner = get_theme_option('header_embed'); if($header_banner != '') { ?>
-<div<?php if( get_header_image() && $header_overlay == 'Yes' ): ?> class="header-overlay-on"<?php endif; ?> id="topbanner">
+<div id="topbanner">
 <?php echo stripcslashes( do_shortcode($header_banner) ); ?>
-</div><!-- TOPBANNER END -->
+</div>
+<!-- TOPBANNER END -->
 <?php } ?>
-
+<?php do_action( 'bp_inside_header' ); ?>
 </div>
 </div>
-<!-- end header-inner -->
 </header>
 <!-- HEADER END -->
-
 <?php do_action( 'bp_after_header' ); ?>
 
 <?php do_action( 'bp_before_container_wrap' ); ?>
+
 <div class="container-wrap">
 
 <?php do_action( 'bp_before_main_nav' ); ?>
 <!-- NAVIGATION START -->
-<nav class="main-nav iegradient" id="main-navigation" role="navigation">
-<div class="innerwrap">
+<nav class="main-nav iegradient" id="main-navigation" role="navigation"<?php do_action('bp_section_nav'); ?>>
 <?php if( has_nav_menu('primary') ):
 wp_nav_menu( array( 'theme_location' => 'primary', 'container' => false, 'menu_class' => 'sf-menu', 'fallback_cb' => '','walker' => new Custom_Description_Walker ));
 else:
@@ -142,35 +115,9 @@ echo '</ul>';
 endif;
 ?>
 <?php do_action( 'bp_inside_main_nav' ); ?>
-</div>
 </nav>
 <!-- NAVIGATION END -->
 <?php do_action( 'bp_after_main_nav' ); ?>
-
-<?php if( get_theme_option('allow_subcat') == 'Enable' ):
-if ( is_category() ) {
-$this_category = get_category($cat);
-if($this_category->category_parent):
-else:
-$in_category = get_category( get_query_var( 'cat' ) );
-$cat_id = $in_category->cat_ID;
-$this_category = wp_list_categories('show_option_none=&orderby=id&depth=5&show_count=0&title_li=&use_desc_for_title=1&child_of='.$this_category->cat_ID."&echo=0");
-if($this_category) {
-echo '<ul class="subcat sub_tn_cat_color_'. $cat_id . '">'. $this_category . '</ul>';
-}
-endif;
-}
-endif; ?>
-
-
-<?php do_action( 'bp_before_custom_header' ); ?>
-<?php
-$header_overlay = get_theme_mod('custom_header_overlay');
-if( get_header_image() && $header_overlay == 'No' ): ?>
-<div id="custom-img-header"><img src="<?php echo header_image(); ?>" alt="" /></div>
-<?php endif; ?>
-<?php do_action( 'bp_after_custom_header' ); ?>
-
 
 <?php do_action( 'bp_before_breadcrumbs' ); ?>
 <?php $breadcrumb_on = get_theme_option('breadcrumbs_on'); if($breadcrumb_on == 'Enable'):

@@ -9,13 +9,14 @@
 
 <!-- POST ENTRY START -->
 <div id="post-entry">
-<section class="post-entry-inner">
+<div class="post-entry-inner">
+<?php do_action( 'bp_before_blog_entry' ); ?>
 
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 
 <div class="post-nav-archive post-nav-image" id="post-navigator-single">
-<div class="alignleft"><?php previous_image_link( false, __( '&larr; Previous', TEMPLATE_DOMAIN ) ); ?></div>
-<div class="alignright"><?php next_image_link( false, __( 'Next &rarr;', TEMPLATE_DOMAIN ) ); ?></div>
+<div class="alignleft"><?php previous_image_link( false, __( '&larr; Previous', 'mesocolumn' ) ); ?></div>
+<div class="alignright"><?php next_image_link( false, __( 'Next &rarr;', 'mesocolumn' ) ); ?></div>
 </div>
 
 <?php do_action( 'bp_before_blog_post' ); ?>
@@ -24,11 +25,11 @@
 <article <?php post_class('post-single image-attachment'); ?> id="post-<?php the_ID(); ?>">
 
 <div class="post-top">
-<h1 class="post-title"><?php the_title(); ?></h1>
+<h1 class="post-title entry-title"><?php the_title(); ?></h1>
 
 <?php
 $metadata = wp_get_attachment_metadata();
-printf( __( '<span class="meta-prep meta-prep-entry-date">Published </span> <span class="entry-date"><time class="entry-date" datetime="%1$s">%2$s</time></span> at <a href="%3$s" title="Link to full-size image">%4$s &times; %5$s</a> in <a href="%6$s" title="Return to %7$s" rel="gallery">%8$s</a>.', TEMPLATE_DOMAIN ),
+printf( __( '<span class="meta-prep meta-prep-entry-date">Published </span> <span class="entry-date"><time class="entry-date" datetime="%1$s">%2$s</time></span> at <a href="%3$s" title="Link to full-size image">%4$s &times; %5$s</a> in <a href="%6$s" title="Return to %7$s" rel="gallery">%8$s</a>.', 'mesocolumn' ),
 									esc_attr( get_the_date( 'c' ) ),
 									esc_html( get_the_date() ),
 									esc_url( wp_get_attachment_url() ),
@@ -45,7 +46,7 @@ printf( __( '<span class="meta-prep meta-prep-entry-date">Published </span> <spa
 </div>
 
 <?php do_action( 'bp_before_post_content' ); ?>
-<div class="post-content">
+<div class="post-content entry-content">
 
 <?php
 /**
@@ -106,8 +107,9 @@ endif;
 <?php get_template_part( 'lib/templates/result' ); ?>
 
 <?php endif; ?>
+<?php do_action( 'bp_after_blog_entry' ); ?>
 
-</section>
+</div>
 </div>
 <!-- POST ENTRY END -->
 

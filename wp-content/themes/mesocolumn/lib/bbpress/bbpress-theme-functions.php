@@ -4,9 +4,9 @@ global $in_bbpress;
 if($in_bbpress):
 print "<style type='text/css' media='all'>"; ?>
 @media only screen and (min-width :768px) and (max-width :1024px){}
-#right-sidebar {}
 body.bbPress .share_box { display:none; margin:0; }
-.content, #content {}
+body.bbpress .content,body.bbpress #right-sidebar {padding:0;margin:1.25em 0 0;}
+body.bbpress #post-entry article.post-single .post-content {padding-top: 0;}
 .bbp-login-form {clear:both;}
 #custom #bbpress-forums ul { font-size: 1.075em !important; }
 #bbpress-forums li { margin:0; }
@@ -28,6 +28,9 @@ body.bbPress .share_box { display:none; margin:0; }
 p.bbp-topic-description a.bbp-author-name { margin: 0 10px 0 0; }
 p.bbp-topic-description a.bbp-author-avatar { margin: 0; }
 #bbpress-forums img.avatar { padding: 2px; border: 1px solid #ddd !important; }
+body.bbpress .header-title {display:none;}
+body.single-forum #subscription-toggle {float:right;}
+textarea.bbp-the-content {border:1px solid #bbb;}
 <?php print "</style>"; ?>
 <?php endif; }
 add_action('wp_head', 'dez_add_bbpress_custom_style');

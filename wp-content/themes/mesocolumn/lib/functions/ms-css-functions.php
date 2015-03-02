@@ -2,7 +2,7 @@
 
 function meso_customcss_theme_menu() {
 global $theme_name;
-add_theme_page( $theme_name . __(' Custom CSS', TEMPLATE_DOMAIN), __('Custom CSS', TEMPLATE_DOMAIN), 'edit_theme_options', 'custom-css', 'meso_customcss_theme_page');
+add_theme_page( $theme_name . __(' Custom CSS', 'mesocolumn'), __('Custom CSS', 'mesocolumn'), 'edit_theme_options', 'custom-css', 'meso_customcss_theme_page');
 }
 //add_action('admin_menu', 'meso_customcss_theme_menu');
 
@@ -12,29 +12,29 @@ global $theme_name;
 ?>
 <div id="custom-theme-option" class="wrap">
 <?php if ( isset($_GET['settings-updated']) && false !== $_REQUEST['settings-updated'] ) : ?>
-<?php echo '<div class="updated fade"><p><strong>'. $theme_name . __(' Custom CSS saved.', TEMPLATE_DOMAIN) . '</strong></p></div>';
+<?php echo '<div class="updated fade"><p><strong>'. $theme_name . __(' Custom CSS saved.', 'mesocolumn') . '</strong></p></div>';
 if(get_option('tn_mesocolumn_custom_css')) { delete_option('tn_mesocolumn_custom_css'); }
 ?>
 <?php endif; ?>
 <?php if ( isset($_POST['action']) && $_POST['action'] == 'settings-reset' ) : ?>
-<?php echo '<div class="updated fade"><p><strong>'. $theme_name . __(' Custom CSS Reset.', TEMPLATE_DOMAIN) . '</strong></p></div>';
+<?php echo '<div class="updated fade"><p><strong>'. $theme_name . __(' Custom CSS Reset.', 'mesocolumn') . '</strong></p></div>';
 ?>
 <?php endif; ?>
 
 <form id="template" method="post" action="options.php" >
 <?php
-settings_fields('meso_theme_options');
+settings_fields( MESO_OPTION . '_theme_options' );
 do_settings_sections('custom-css');
 ?>
 <p class="submit">
-<input type="submit" class="button-primary" value="<?php _e('Save Custom CSS', TEMPLATE_DOMAIN) ?>" />
+<input type="submit" class="button-primary" value="<?php _e('Save Custom CSS', 'mesocolumn') ?>" />
 </p>
 </form>
 <form action="<?php echo admin_url('themes.php?page=theme-options&tab='.$_GET['tab']); ?>" method="post">
 <div style="float:left;padding:0;margin:0;" class="submit">
 <?php
-$alert_message = __("Are you sure you want to delete all saved custom css?.", TEMPLATE_DOMAIN ); ?>
-<input name="reset" type="submit" class="button-secondary" onclick="return confirm('<?php echo $alert_message; ?>')" value="<?php echo esc_attr(__('Reset Custom CSS',TEMPLATE_DOMAIN)); ?>" />
+$alert_message = __("Are you sure you want to delete all saved custom css?.", 'mesocolumn' ); ?>
+<input name="reset" type="submit" class="button-secondary" onclick="return confirm('<?php echo $alert_message; ?>')" value="<?php echo esc_attr(__('Reset Custom CSS','mesocolumn')); ?>" />
 <input type="hidden" name="action" value="settings-reset" />
 </div>
 </form>
@@ -49,7 +49,7 @@ function meso_customcss_display_section($section){}
 function meso_customcss_display_setting($args) {
 global $theme_name, $shortname;
 extract( $args );
-$option_name = 'meso_theme_options';
+$option_name = MESO_OPTION . '_theme_options';
 $options = get_option( $option_name );
 
 switch ( $type ) {
@@ -74,7 +74,7 @@ break;
 //reset custom css options
 function meso_custom_css_reset() {
 global $wpdb, $wp_cats2, $wp_pages, $theme_name, $shortname, $meso_options;
-$option_name = 'meso_theme_options';
+$option_name = MESO_OPTION . '_theme_options';
 $options = get_option( $option_name );
 if ( isset($_GET['page']) && $_GET["page"] == "theme-options" && isset($_GET['tab']) && $_GET["tab"] == "custom-css" ) {
 if ( isset($_POST['action']) && $_POST['action'] == 'settings-reset'  ) {

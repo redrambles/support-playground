@@ -2,8 +2,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Global Define
 ////////////////////////////////////////////////////////////////////////////////
-define('TEMPLATE_DOMAIN', 'mesocolumn'); // do not change this, its for translation and options string
-define('SUPER_STYLE', 'no');
+// do not change this, its for translation and options string
+define('TEMPLATE_DOMAIN', 'mesocolumn');
+// added option name
+if( !defined('MESO_OPTION') ) { define('MESO_OPTION', 'meso'); }
+if( !defined('SUPER_STYLE') ) { define('SUPER_STYLE', 'yes'); }
 ////////////////////////////////////////////////////////////////////////////////
 // Additional Theme Support
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,21 +16,21 @@ if ( !isset( $content_width ) ) { $content_width = 550; }
 ////////////////////////////////////////////////////////////////////////////////
 // Add Language Support
 ////////////////////////////////////////////////////////////////////////////////
-load_theme_textdomain( TEMPLATE_DOMAIN, get_template_directory() . '/languages' );
+load_theme_textdomain( 'mesocolumn', get_template_directory() . '/languages' );
 add_theme_support( 'post-thumbnails' );
-add_theme_support( 'woocommerce' );
-add_image_size( 'thumbnail', 300, 300, true);
+if( class_exists('woocommerce') ) { add_theme_support( 'woocommerce' ); }
+add_theme_support( "title-tag" );
 add_image_size( 'featured-slider-img', 640, 480, true );
-set_post_thumbnail_size( 624, 9999 ); // Unlimited height, soft crop
+add_image_size( 'featured-post-img', 480, 320, true );
 // Add default posts and comments RSS feed links to head
 add_theme_support( 'automatic-feed-links' );
 add_editor_style();
 add_theme_support( 'menus' );
 
 register_nav_menus( array(
-'top' => __( 'Top Menu', TEMPLATE_DOMAIN ),
-'primary' => __( 'Primary Menu', TEMPLATE_DOMAIN ),
-'footer' => __( 'Footer Menu', TEMPLATE_DOMAIN ),
+'top' => __( 'Top Menu', 'mesocolumn' ),
+'primary' => __( 'Primary Menu', 'mesocolumn' ),
+'footer' => __( 'Footer Menu', 'mesocolumn' ),
 ));
 
 $custom_background_support = array(
@@ -85,7 +88,8 @@ return $menu;
 
 // add home link in custom menus
 function mesocolumn_dtheme_page_menu_args( $args ) {
-$args['show_home'] = true; return $args; }
+$args['show_home'] = __('Home', 'mesocolumn');
+return $args; }
 add_filter( 'wp_page_menu_args', 'mesocolumn_dtheme_page_menu_args' );
 
 
@@ -122,8 +126,9 @@ global $in_bbpress;
 $forum_root_slug = get_option('_bbp_forum_slug');
 $topic_root_slug = get_option('_bbp_topic_slug');
 $reply_root_slug = get_option('_bbp_reply_slug');
+$tag_root_slug = get_option('_bbp_tag_slug');
 if( get_post_type() == 'forum' || is_page('forums') || is_page('support') || get_post_type() == $forum_root_slug ||
-get_post_type() == $topic_root_slug || get_post_type() == $reply_root_slug ) {
+get_post_type() == $topic_root_slug || get_post_type() == $reply_root_slug || get_post_type() == $tag_root_slug ) {
 $in_bbpress = 'true';
 }
 //echo $in_bbpress;
@@ -143,29 +148,68 @@ if($is_IE): ?>
 <?php get_template_part ( '/lib/options/options-css' ); ?>
 <?php
 $header_textcolor = get_theme_mod('header_textcolor');
+if( get_header_image() && $header_textcolor == 'blank') { ?>
+#custom #siteinfo h1,#custom #siteinfo div, #custom #siteinfo p {display:none;}
+<?php }
 if( get_header_image() && $header_textcolor != '' ): ?>
-#custom #header-overlay a {color: #<?php echo $header_textcolor; ?> !important;text-decoration: none;}
+#custom #siteinfo a {color: #<?php echo $header_textcolor; ?> !important;text-decoration: none;}
 #custom #siteinfo p#site-description {color: #<?php echo $header_textcolor; ?> !important;text-decoration: none;}
 <?php endif; ?>
 <?php
 $header_overlay = get_theme_mod('custom_header_overlay');
 if( get_header_image() && $header_overlay == 'Yes' ): ?>
-#header-overlay { float:left;width:100%;padding:0%;background: transparent url('<?php echo get_header_image(); ?>') no-repeat center center; background-size: auto <?php echo get_custom_header()->height; ?>px; height:<?php echo get_custom_header()->height; ?>px; }
-@media only screen and (min-width:300px) and (max-width:770px){
-#header-overlay { background-size: 100% auto; height:auto; }
-}
+#siteinfo {position:absolute;top:15%;left:2em;}
+#topbanner {position:absolute;top:15%;right:2em;}
+#custom #custom-img-header {margin:0;}
 <?php endif; ?>
+
 <?php $breadcrumb_on = get_theme_option('breadcrumbs_on');
 if($breadcrumb_on != 'Enable'): ?>
-.content, #right-sidebar { padding-top: 3em !important; }
+.content, #right-sidebar {}
 <?php endif; ?>
+
+<?php
+$feat_size = get_theme_option('feat_img_size');
+if($feat_size == ''){ $feat_size = 'thumbnail'; }
+$thumb_w = get_option($feat_size.'_size_w');
+$thumb_h = get_option($feat_size.'_size_h');
+?>
+
+<?php if($feat_size != 'large'){ ?>
+#post-entry div.post-thumb.size-<?php echo $feat_size; ?> {float:left;width:<?php echo $thumb_w; ?>px;}
+#post-entry article .post-right {margin:0 0 0 <?php echo $thumb_w + 20; ?>px;}
+<?php } else { ?>
+#post-entry div.post-thumb {margin:0 0 1em;width:100%;}
+#post-entry article .post-right {width:100%;float:left;margin:0;}
+<?php } ?>
+
+<?php
+$get_feat_layout = get_theme_option('feat_layout');
+if( $get_feat_layout == 'all thumbnail' ) { ?>
+#post-entry aside.home-feat-cat .fpost {padding:0;}
+#post-entry aside.home-feat-cat .fpost .feat-right {margin: 0em 0em 0em 140px;}
+#post-entry aside.home-feat-cat .fpost .feat-thumb {width: 125px;}
+#post-entry aside.home-feat-cat .fpost .entry-content {font-size:1.1em;line-height: 1.5em !important;}
+#post-entry aside.home-feat-cat .fpost .feat-title {font-size:1.35em;margin:0;}
+#post-entry aside.home-feat-cat .fpost .feat_comment {display:none;}
+<?php } elseif($get_feat_layout == 'all medium') { ?>
+#post-entry aside.home-feat-cat .apost .feat-right {margin: 0;}
+#post-entry aside.home-feat-cat .apost .feat-thumb {width: 100%;}
+#post-entry aside.home-feat-cat .apost .entry-content {font-size:1.25em;}
+#post-entry aside.home-feat-cat .apost .feat-title {font-size:1.65em;margin:12px 0 8px !important;}
+#custom #post-entry aside.home-feat-cat .apost {padding:0 0 2em !important;margin:0 0 2em !important;}
+@media only screen and (min-width:300px) and (max-width:770px){
+#post-entry aside.home-feat-cat .apost .feat-thumb {height:auto;max-height:1000px;} }
+<?php } ?>
+
+<?php do_action('meso_custom_style_init'); ?>
+
 <?php if( get_theme_option('custom_css', 'css') ): ?>
 <?php echo get_theme_option('custom_css', 'css'); ?>
 <?php endif; ?>
 <?php print "</style>"; ?>
 <?php }
 add_action('wp_head','mesocolumn_theme_custom_style_init');
-
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -183,6 +227,11 @@ add_action('wp_enqueue_scripts', 'mesocolumn_theme_load_gwf_styles');
 /*---------------------------load styles--------------------------------------*/
 function mesocolumn_theme_load_styles() {
 global $theme_version,$is_IE,$bp_active;
+$responsive_mode = get_theme_option('responsive_mode');
+
+if ( $responsive_mode == 'Enable' ) {
+wp_enqueue_style( 'style-responsive', get_template_directory_uri() . '/responsive.css', array(), $theme_version );
+}
 
 if ( function_exists('is_rtl') && is_rtl() && file_exists( get_template_directory() . '/rtl.css' ) ) {
 wp_enqueue_style( 'style-rtl', get_template_directory_uri() . '/rtl.css', array(), $theme_version );
@@ -190,7 +239,9 @@ wp_enqueue_style( 'style-rtl', get_template_directory_uri() . '/rtl.css', array(
 
 if ( class_exists('woocommerce') && get_theme_option('custom_shop') == 'Enable' ) {
 if( file_exists( get_template_directory() . '/lib/woocommerce/woocommerce-theme-css.css' ) ):
+
 wp_enqueue_style( 'custom-woo-css', get_template_directory_uri() . '/lib/woocommerce/woocommerce-theme-css.css', array(), $theme_version );
+
 endif;
 }
 
@@ -211,14 +262,16 @@ endif;
 
 wp_enqueue_style( 'superfish', get_template_directory_uri(). '/lib/scripts/superfish-menu/css/superfish.css', array(), $theme_version );
 
+if ( is_active_sidebar( 'tabbed-sidebar' ) ) {
 wp_enqueue_style( 'tabber', get_template_directory_uri() . '/lib/scripts/tabber/tabber.css', array(), $theme_version );
+}
 
 if ( ( is_home() || is_front_page() || is_page_template('page-templates/template-blog.php') ) && get_theme_option('slider_on') == 'Enable'  ) {
 wp_enqueue_style( 'jd-gallery-css', get_template_directory_uri(). '/lib/scripts/jd-gallery/jd.gallery.css', array(), $theme_version );
 }
 
 /*load font awesome */
-wp_enqueue_style( 'font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css', array(), $theme_version );
+wp_enqueue_style( 'font-awesome-cdn', get_template_directory_uri(). '/lib/scripts/font-awesome/css/font-awesome.css', array(), $theme_version );
 
 ?>
 
@@ -235,11 +288,13 @@ wp_enqueue_script('hoverIntent');
 
 wp_enqueue_script('modernizr', get_template_directory_uri() . '/lib/scripts/modernizr/modernizr.js', false, $theme_version, true );
 
-if($is_IE):
-wp_enqueue_script('html5shim', '//html5shiv.googlecode.com/svn/trunk/html5.js', false,$theme_version, false );
-endif;
+if($is_IE) {
+wp_enqueue_script('html5shim', get_template_directory_uri() . '/lib/scripts/html5shiv.js', false,$theme_version, false );
+}
 
+if ( is_active_sidebar( 'tabbed-sidebar' ) ) {
 wp_enqueue_script( 'tabber', get_template_directory_uri() . '/lib/scripts/tabber/tabber.js', false, $theme_version, true );
+}
 
 wp_enqueue_script('superfish-js', get_template_directory_uri() . '/lib/scripts/superfish-menu/js/superfish.js', false, $theme_version, true );
 wp_enqueue_script('supersub-js', get_template_directory_uri() . '/lib/scripts/superfish-menu/js/supersubs.js', false, $theme_version, true );
@@ -258,7 +313,7 @@ add_action( 'wp_enqueue_scripts', 'mesocolumn_theme_load_scripts' );
 /* prior to mesocolumn theme custom.css */
 function check_if_custom_css_exists() {
 if( file_exists( get_template_directory() . '/custom.css') || file_exists( get_stylesheet_directory() . '/custom.css') ):
-printf( __('<div class="error"><p>Custom.css found in your theme, please copy paste your <a href="%1$s">custom.css</a> content into wp-admin->appeareance->custom css and then delete/moved the custom.css file.</p></div>', TEMPLATE_DOMAIN), admin_url('/theme-editor.php?file=custom.css&theme=mesocolumn') );
+printf( __('<div class="error"><p>Custom.css found in your theme, please copy paste your <a href="%1$s">custom.css</a> content into wp-admin->appeareance->custom css and then delete/moved the custom.css file.</p></div>', 'mesocolumn'), admin_url('/theme-editor.php?file=custom.css&theme=mesocolumn') );
 endif;
 }
 add_action('admin_notices', 'check_if_custom_css_exists', 10);
@@ -267,19 +322,10 @@ add_action('admin_notices', 'check_if_custom_css_exists', 10);
 function check_if_option_db_updated() {
 $check_themecleanup = get_option('tn_mesocolumn_body_font');
 if( $check_themecleanup ) {
-printf( __('<div class="error"><p>Theme Options database need to update! resave your theme options, category color, page color and custom css options one by one</p></div>', TEMPLATE_DOMAIN) );
+printf( __('<div class="error"><p>Theme Options database need to update! resave your theme options, category color, page color and custom css options one by one</p></div>', 'mesocolumn') );
 }
 }
 add_action('admin_notices', 'check_if_option_db_updated', 10);
-
-
-/* add slider if use static homepage */
-function dez_add_slider_frontpage() {
-if( 'page' == get_option( 'show_on_front' ) && is_front_page() && get_theme_option('slider_on') == 'Enable'):
-get_template_part( 'lib/sliders/jd-gallery-slider' );
-endif;
-}
-add_action('bp_before_blog_home','dez_add_slider_frontpage');
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -361,9 +407,20 @@ endif;
 endif;
 
 
-/* check if custom function file is active */
-if( file_exists( WP_CONTENT_DIR . '/meso-custom-functions.php' ) ):
-include_once( WP_CONTENT_DIR . '/meso-custom-functions.php' );
+/* check parent and child theme for hooks-functions.php */
+if( is_child_theme() && 'mesocolumn' == get_template() && file_exists( get_stylesheet_directory() . '/lib/functions/hooks-functions.php' ) ):
+include( get_stylesheet_directory() . '/lib/functions/hooks-functions.php' );
+else:
+if ( file_exists( get_template_directory() . '/lib/functions/hooks-functions.php' ) ):
+include( get_template_directory() . '/lib/functions/hooks-functions.php' );
 endif;
+endif;
+
+
+
+/* check if custom function file is active */
+if( file_exists( WP_CONTENT_DIR . '/meso-custom-functions.php' ) ) {
+include_once( WP_CONTENT_DIR . '/meso-custom-functions.php' );
+}
 
 ?>

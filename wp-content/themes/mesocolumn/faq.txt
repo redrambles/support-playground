@@ -6,16 +6,8 @@ Frequently Ask Questions
 2. The shadow on top navigation is missing?
 - the shadow will dissapear if background color or image are saved in wp-admin->appeareance->background
 
-3. How to remove the responsive of the theme and make it fixed width?
-- open style.css go to bottom and delete line started from
-/////////////////////////////////////////////
-// mobile css
-////////////////////////////////////////////
-and add this to wp-admin->appereance->custom css
-footer .innerwrap, header .innerwrap, #bodywrap, .innerwrap-custom-header, #main-navigation .innerwrap {
-width: 1120px;
-}
-change the 1120px width to your own.
+3. How to remove the responsive of the theme?
+- go to wp-admin->appeareance->theme options->misc setting->disable responsive
 
 4. I've done everything, save options and setup widget but the site still look the same?
 - if you have any cache plugin installed, clear the cache or your browser cache

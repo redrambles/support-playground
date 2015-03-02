@@ -14,23 +14,28 @@ Template Name: Blogroll
 <?php do_action( 'bp_before_blog_home' ); ?>
 
 <div id="post-entry">
-<section class="post-entry-inner">
+<div class="post-entry-inner">
+<?php do_action( 'bp_before_blog_entry' ); ?>
 
 <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-
+<?php do_action( 'bp_before_blog_post' ); ?>
 <!-- POST START -->
 <article <?php post_class('post-single page-single'); ?> id="post-<?php the_ID(); ?>">
-<h1 class="post-title"><?php the_title(); ?></h1>
-<div class="post-content">
+<h1 class="post-title entry-title"><?php the_title(); ?></h1>
+<?php do_action( 'bp_before_post_content' ); ?>
+<div class="post-content entry-content">
 <?php the_content(); ?>
-<h2><?php _e('Useful Resources:', TEMPLATE_DOMAIN); ?></h2>
+<h2><?php _e('Useful Resources:', 'mesocolumn'); ?></h2>
 <ul><?php wp_list_bookmarks('title_li=&categorize=0'); ?></ul>
 </div>
+<?php do_action( 'bp_after_post_content' ); ?>
 </article>
 <!-- POST END -->
-
+<?php do_action( 'bp_after_blog_post' ); ?>
 <?php endwhile; endif; ?>
-</section>
+
+<?php do_action( 'bp_after_blog_entry' ); ?>
+</div>
 </div>
 <!-- POST ENTRY END -->
 

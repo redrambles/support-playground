@@ -1,6 +1,6 @@
-<div class="post-meta the-icons pmeta-alt<?php if( is_page() ) { echo ' meta-no-display'; } ?>">
+<div class="post-meta the-icons pmeta-alt<?php global $in_bbpress; if( is_page() || $in_bbpress == 'true' ) { echo ' meta-no-display'; } ?>">
+
 <span class="post-author vcard"><i class="fa fa-user"></i><?php the_author_posts_link(); ?></span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 <?php
 $getmodtime = get_the_modified_time(); if( !$getmodtime ) {
@@ -16,16 +16,16 @@ $modtime = '<span class="date updated meta-no-display">'. get_the_modified_time(
 <?php if(get_post_type() != 'post' && get_post_type() != 'page'): ?>
 <?php else: ?>
 <?php if( is_tax() ) { ?>
-&nbsp;&nbsp;&nbsp;&nbsp;<?php echo the_taxonomies('before=<span class="post-category"><i class="fa fa-file"></i>&after=</span>'); ?>
+<?php echo the_taxonomies('before=<span class="post-category"><i class="fa fa-file"></i>&after=</span>'); ?>
 <?php } else { ?>
 <?php if( get_post_type() != 'page') { ?>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="post-category"><i class="fa fa-file"></i><?php if( is_singular() ) { echo the_category(', '); } else { echo dez_get_singular_cat(); } ?></span>
+<span class="post-category"><i class="fa fa-file"></i><?php if( is_singular() ) { echo the_category(', '); } else { echo dez_get_singular_cat(); } ?></span>
 <?php } ?>
 <?php } ?>
 <?php endif; ?>
 <?php if ( comments_open() ) { ?>
 <?php if( !is_tax() ) { ?>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="post-comment"><i class="fa fa-comment"></i><?php comments_popup_link(__('No Comment',TEMPLATE_DOMAIN), __('1 Comment',TEMPLATE_DOMAIN), __('% Comments',TEMPLATE_DOMAIN) ); ?></span>
+<span class="post-comment last"><i class="fa fa-comment"></i><?php comments_popup_link(__('No Comment','mesocolumn'), __('1 Comment','mesocolumn'), __('% Comments','mesocolumn') ); ?></span>
 <?php } ?>
 <?php } ?>
 </div>

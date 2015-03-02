@@ -3,8 +3,11 @@
 ------------------------------------------------------------------
 1.0 - BuddyPress CSS
 --------------------------------------------------------------*/
+.widget.buddypress span.activity {font-size: 10px;}
+body.activity.directory h1.post-title {margin:1em 0 0 !important;}
+#custom .widget.buddypress ul.item-list img.avatar {width: 50px;height:50px;}
 #post-topic-reply {clear:both;}
-#content {float: left;width: 69%;padding: 0;background: #FFF;border: 1px solid #ddd;margin: 3em 0 1em 0 !important;box-shadow: 0 0 0 3px #F2F2F2;-moz-box-shadow: 0 0 0 3px #f2f2f2;-webkit-box-shadow: 0 0 0 3px #F2F2F2;}
+#content {float: left;width: 69%;padding: 0;background: #FFF;border: 1px solid #ddd;box-shadow: 0 0 0 3px #F2F2F2;-moz-box-shadow: 0 0 0 3px #f2f2f2;-webkit-box-shadow: 0 0 0 3px #F2F2F2;}
 #content ul, #content li {list-style:none;}
 #content ul {padding:0 1em;}
 #right-sidebar img.avatar {max-width:50px !important;height:auto;}
@@ -75,9 +78,18 @@ body#custom #buddypress .activity-meta a {color:#555 !important;text-decoration:
   background: transparent url(../../images/rss2.png) no-repeat left center;
 }
 .directory #post-entry h1.post-title {
-  width:96% !important;padding:2% 2% 0 !important;font-size: 1.8em !important;
+  width:96% !important;padding:0 2% 0 !important;font-size: 1.8em !important;
 }
-
+.buddypress #post-entry article .post-content {
+  margin:0;padding:0;
+}
+body.buddypress #container .content {
+  padding-top:2em;
+  margin:1.25em 0 0;
+}
+body.directory.activity #container .content {
+  padding-top:0 !important;
+}
 .widget.buddypress ul.item-list img.avatar {
     height: auto;
     width: auto;
@@ -156,7 +168,6 @@ body#custom #buddypress .activity-meta a {color:#555 !important;text-decoration:
 	padding: 0;
 	background: #FFF;
 	border: 1px solid #ddd;
-    margin: 3em 0 1em 0 !important;
 box-shadow: 0 0 0 3px #F2F2F2;
 	-moz-box-shadow: 0 0 0 3px #f2f2f2;
 	-webkit-box-shadow: 0 0 0 3px #F2F2F2;
@@ -205,7 +216,7 @@ background: transparent none;
  font-size: 1.85em;
 }
 
-#right-sidebar.buddypress-sidebar { width: 28%; float:right; padding:3em 0 0; }
+#right-sidebar.buddypress-sidebar { width: 28%; float:right; padding:0; margin:1.25em 0 0; }
 
 .widget .activity-inner, .widget .activity-meta{ display:none; }
 .widget .activity_update .activity-inner { display:inline; }

@@ -13,7 +13,6 @@ jQuery("ul.sf-menu").supersubs({
         }).superfish();
 });
 
-
 document.write('<style type="text/css">.tabber{display:none;}<\/style>');
 
 function startGallery() {

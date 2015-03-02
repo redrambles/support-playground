@@ -1,4 +1,12 @@
-body{text-align:right;}
+body {direction: rtl;unicode-bidi: embed;text-align:right;}
+.sf-menu li {float: right;}
+#siteinfo {float: right;text-align:right;}
+#topbanner {float: left;}
+.footer-left {float: right;text-align:right;}
+.footer-right {float: left;text-align:left;}
+.footer-right ul {float:left;}
+.footer-right ul li {margin: 0px 13px 0px 0px;}
+aside.home-feat-cat .apost .feat-thumb {float: right;}
 img.home-feat-rss {float: left;}
 .post-meta i {display: inline;}
 .wp-caption .wp-caption-text:before {content: '' !important;}

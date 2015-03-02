@@ -21,7 +21,7 @@ $wpsidebar = 'true';
 }
 ?>
 
-<div id="right-sidebar" class="sidebar <?php echo $dynamic_sidebar; ?>">
+<div id="right-sidebar" class="sidebar <?php echo $dynamic_sidebar; ?>"<?php do_action('bp_section_sidebar'); ?>>
 <div class="sidebar-inner">
 <div class="widget-area the-icons">
 <?php do_action('bp_before_right_sidebar'); ?>
@@ -44,19 +44,19 @@ $wpsidebar = 'true';
 <?php endif; ?>
 <?php endif; ?>
 <aside class="widget">
-<h3 class="widget-title"><?php _e('Search',TEMPLATE_DOMAIN); ?></h3>
+<h3 class="widget-title"><?php _e('Search','mesocolumn'); ?></h3>
 <?php get_search_form(); ?>
 </aside>
 <aside class="widget widget_recent_entries">
-<h3 class="widget-title"><?php _e('Recent Posts', TEMPLATE_DOMAIN); ?></h3>
+<h3 class="widget-title"><?php _e('Recent Posts', 'mesocolumn'); ?></h3>
 <ul><?php wp_get_archives('type=postbypost&limit=5'); ?></ul>
 </aside>
 <aside class="widget widget">
-<h3 class="widget-title"><?php _e('Pages', TEMPLATE_DOMAIN); ?></h3>
+<h3 class="widget-title"><?php _e('Pages', 'mesocolumn'); ?></h3>
 <ul><?php wp_list_pages('title_li='); ?></ul>
 </aside>
 <aside class="widget">
-<h3 class="widget-title"><?php _e('Tags',TEMPLATE_DOMAIN); ?></h3>
+<h3 class="widget-title"><?php _e('Tags','mesocolumn'); ?></h3>
 <div class="tagcloud"><ul><?php wp_tag_cloud('smallest=10&largest=20&number=30&unit=px&format=flat&orderby=name'); ?></ul></div>
 </aside>
 <?php endif; ?>

@@ -12,8 +12,8 @@
 <?php echo dez_custom_kriesi_pagination(); ?>
 <?php else: ?>
 <div class="wp-pagenavi">
-<div class="alignright"><?php next_posts_link(__('Older Entries &raquo;', TEMPLATE_DOMAIN) ); ?></div>
-<div class="alignleft"><?php previous_posts_link(__('&laquo; Newer Entries', TEMPLATE_DOMAIN) ); ?></div>
+<div class="alignright"><?php next_posts_link(__('Older Entries &raquo;', 'mesocolumn') ); ?></div>
+<div class="alignleft"><?php previous_posts_link(__('&laquo; Newer Entries', 'mesocolumn') ); ?></div>
 </div>
 <?php endif; ?>
 </div>
