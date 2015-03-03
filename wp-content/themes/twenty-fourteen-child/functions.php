@@ -168,7 +168,7 @@ add_shortcode('home', 'diy_home_link_shortcode');
 
 
 //Display recent posts from a category
-function wpb_postsbycategory() {
+function red_postsbycategory() {
 // the query
 $the_query = new WP_Query( array( 'category_name' => 'edge-case-2', 'posts_per_page' => 10 ) ); 
 
@@ -196,7 +196,7 @@ return $string;
 wp_reset_postdata();
 }
 // Add a shortcode [categoryposts]
-add_shortcode('categoryposts', 'wpb_postsbycategory');
+add_shortcode('categoryposts', 'red_postsbycategory');
 
 // Enable shortcodes in text widgets
 add_filter('widget_text', 'do_shortcode');
