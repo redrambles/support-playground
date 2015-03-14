@@ -12,6 +12,20 @@ get_header(); ?>
 	<div id="primary" class="content-area">
 		<div id="content" class="site-content" role="main">
 
+
+		<?php
+		// TESTING the loading of a single post OUSTIDE the loop
+		GLOBAL $post;
+		$my_id = 1176;
+		$myPost = get_post( $my_id );
+		setup_postdata( $myPost ); 
+			$meta = get_post_meta($post->ID);
+			echo explode('$meta', '');
+			echo get_the_title( '<h1 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h1>' ); ?>
+			<div class="entry-content">
+				<?php the_content(); ?>
+			</div>
+		</header>
 			<?php
 				// Start the Loop.
 				while ( have_posts() ) : the_post();

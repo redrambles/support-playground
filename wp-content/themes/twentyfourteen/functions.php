@@ -197,7 +197,7 @@ function twentyfourteen_widgets_init() {
 	register_sidebar( array(
 		'name'          => __( 'Test Sidebar', 'twentyfourteen' ),
 		'id'            => 'sidebar-4',
-		'description'   => __( 'Alternative dditional sidebar that appears on the right', 'twentyfourteen' ),
+		'description'   => __( 'Alternative additional sidebar that appears on the right', 'twentyfourteen' ),
 		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</aside>',
 		'before_title'  => '<h1 class="widget-title">',

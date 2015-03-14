@@ -167,10 +167,10 @@ add_shortcode('home', 'diy_home_link_shortcode');
 
 
 
-//Display recent posts from a category
+//Display Recent Rosts from a Category with their featured images resized to 50x50px and their titles (both linked) - Shortcode below!
 function red_postsbycategory() {
 // the query
-$the_query = new WP_Query( array( 'category_name' => 'edge-case-2', 'posts_per_page' => 10 ) ); 
+$the_query = new WP_Query( array( 'category_name' => 'edge-case-2', 'posts_per_page' => 10 ) ); //Adjust category_name to hold one or many categories
 
 // The Loop
 if ( $the_query->have_posts() ) {
@@ -195,6 +195,7 @@ return $string;
 /* Restore original Post Data */
 wp_reset_postdata();
 }
+
 // Add a shortcode [categoryposts]
 add_shortcode('categoryposts', 'red_postsbycategory');
 
