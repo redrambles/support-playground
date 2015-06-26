@@ -11,14 +11,14 @@
  * functions.php file. The child theme's functions.php file is included before
  * the parent theme's file, so the child theme functions would be used.
  *
- * @link http://codex.wordpress.org/Theme_Development
- * @link http://codex.wordpress.org/Child_Themes
+ * @link https://codex.wordpress.org/Theme_Development
+ * @link https://codex.wordpress.org/Child_Themes
  *
  * Functions that are not pluggable (not wrapped in function_exists()) are
  * instead attached to a filter or action hook.
  *
  * For more information on hooks, actions, and filters,
- * @link http://codex.wordpress.org/Plugin_API
+ * @link https://codex.wordpress.org/Plugin_API
  *
  * @package WordPress
  * @subpackage Twenty_Fourteen
@@ -94,7 +94,7 @@ function twentyfourteen_setup() {
 
 	/*
 	 * Enable support for Post Formats.
-	 * See http://codex.wordpress.org/Post_Formats
+	 * See https://codex.wordpress.org/Post_Formats
 	 */
 	add_theme_support( 'post-formats', array(
 		'aside', 'image', 'video', 'audio', 'quote', 'link', 'gallery',
@@ -194,15 +194,6 @@ function twentyfourteen_widgets_init() {
 		'before_title'  => '<h1 class="widget-title">',
 		'after_title'   => '</h1>',
 	) );
-	register_sidebar( array(
-		'name'          => __( 'Test Sidebar', 'twentyfourteen' ),
-		'id'            => 'sidebar-4',
-		'description'   => __( 'Alternative additional sidebar that appears on the right', 'twentyfourteen' ),
-		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</aside>',
-		'before_title'  => '<h1 class="widget-title">',
-		'after_title'   => '</h1>',
-	) );
 }
 add_action( 'widgets_init', 'twentyfourteen_widgets_init' );
 
@@ -269,7 +260,7 @@ function twentyfourteen_scripts() {
 		) );
 	}
 
-	wp_enqueue_script( 'twentyfourteen-script', get_template_directory_uri() . '/js/functions.js', array( 'jquery' ), '20140616', true );
+	wp_enqueue_script( 'twentyfourteen-script', get_template_directory_uri() . '/js/functions.js', array( 'jquery' ), '20150315', true );
 }
 add_action( 'wp_enqueue_scripts', 'twentyfourteen_scripts' );
 
@@ -339,7 +330,7 @@ function twentyfourteen_the_attached_image() {
 
 		// or get the URL of the first image attachment.
 		else {
-			$next_attachment_url = get_attachment_link( array_shift( $attachment_ids ) );
+			$next_attachment_url = get_attachment_link( reset( $attachment_ids ) );
 		}
 	}
 
@@ -526,7 +517,3 @@ require get_template_directory() . '/inc/customizer.php';
 if ( ! class_exists( 'Featured_Content' ) && 'plugins.php' !== $GLOBALS['pagenow'] ) {
 	require get_template_directory() . '/inc/featured-content.php';
 }
-
-
-
-

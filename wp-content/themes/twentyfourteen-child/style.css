@@ -1,0 +1,38 @@
+/*
+ Theme Name:     Twenty Fourteen Child
+ Theme URI:      http://www.elegantthemes.com/gallery/foxy/
+ Description:    Twenty Fourteen Child Theme
+ Template:       twentyfourteen
+ Version:        1.0.0
+*/
+
+
+@import url("../twentyfourteen/style.css");
+
+
+.movie-link {
+	margin-top: 30px;
+}
+
+.movie-meta {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.movie-meta li{
+	list-style: none;
+}
+
+
+/* Post by category function (shortcode) */
+
+ul.postsbycategory {
+list-style-type: none;
+}
+
+.postsbycategory img {
+float:left; 
+padding:3px;
+margin:3px;
+border: 3px solid #EEE;
+}
