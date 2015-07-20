@@ -75,11 +75,6 @@ function movie_create_taxonomies() {
 }
 add_action( 'init', 'movie_create_taxonomies', 0);
 
-// Enables the use of shortcodes in sidebars - 
-add_filter('widget_text', 'shortcode_unautop'); // This removes any 'forced styling' WP would have included
-add_filter('widget_text', 'do_shortcode');
-
-
 // Add Custom Meta Box
 function movie_create_time_meta_box() {
 	add_meta_box( 'movie_time_metabox', 'Time of the day movie was watched:', 'movie_time', 'movie-reviews', 'normal', 'high' );
@@ -104,53 +99,56 @@ function movie_time_save_meta( $post_id ) {
 	}
 }
 
+// Enables the use of shortcodes in sidebars - 
+//add_filter('widget_text', 'shortcode_unautop'); // This removes any 'forced styling' WP would have included
+add_filter('widget_text', 'do_shortcode');
+
 
 // shortcode: [page_sidebar] Usage example = [page_sidebar id="2" ] 
-function diy_page_in_sidebar($atts, $content=null){
+function red_page_in_sidebar($atts, $content=null){
+	global $post;
  
     extract(shortcode_atts( array('id' => ''), $atts));
 
      $output = '';
      $args = array(
-		'page_id' => $id,
+		'page_id' => intval($id),
 		);
      $custom_query = new WP_Query( $args );
 
 		if ($custom_query->have_posts()) :
-		$output .= '<div class="page_sidebar">';
-		while ($custom_query->have_posts()) : $custom_query->the_post();?>
-		<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-		<?php the_post_thumbnail('thumb');?>
-
-		<?php endwhile;
-		$output .= '</div>';
+			$output .= '<div class="page_sidebar">';
+			while ($custom_query->have_posts()) : $custom_query->the_post();
+				$output .=  '<h4><a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_title() .'</a></h4>'; 
+				$output .=	'<a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_post_thumbnail($post->ID, 'thumb') .'</a>';
+			endwhile;
+			$output .= '</div>';
 		endif;
 		wp_reset_postdata(); 
 
 	return $output;
-
 }
-add_shortcode('page_sidebar', 'diy_page_in_sidebar');
+add_shortcode('page_sidebar', 'red_page_in_sidebar');
 
 // shortcode: [post_sidebar] Usage example = [post_sidebar id="4" ] 
 function diy_post_in_sidebar($atts, $content=null){
- 
+ 	global $post;
+
     extract(shortcode_atts( array('id' => ''), $atts));
 
      $output = '';
      $args = array(
-		'p' => $id,
+		'p' => intval($id),
 		);
      $custom_query = new WP_Query( $args );
 
 		if ($custom_query->have_posts()) :
-		$output .= '<div class="post_sidebar">';
-		while ($custom_query->have_posts()) : $custom_query->the_post();?>
-		<h4><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
-		<?php the_post_thumbnail('thumb');?>
-
-		<?php endwhile;
-		$output .= '</div>';
+			$output .= '<div class="post_sidebar">';
+			while ($custom_query->have_posts()) : $custom_query->the_post();
+				$output .=  '<h4><a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_title() .'</a></h4>'; 
+				$output .=	'<a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_post_thumbnail($post->ID, 'thumb') .'</a>';
+			endwhile;
+			$output .= '</div>';
 		endif;
 		wp_reset_postdata(); 
 
@@ -167,10 +165,12 @@ add_shortcode('home', 'diy_home_link_shortcode');
 
 
 
-//Display Recent Rosts from a Category with their featured images resized to 50x50px and their titles (both linked) - Shortcode below!
+//Display Recent Rosts from a Category with their featured images resized to 50x50px and their titles (both linked)
 function red_postsbycategory() {
 // the query
+	global $post;
 	$the_query = new WP_Query( array( 'category_name' => 'edge-case-2', 'posts_per_page' => 10 ) ); //Adjust category_name to hold one or many categories
+	$string = '';
 
 	// The Loop
 	if ( $the_query->have_posts() ) {
@@ -179,7 +179,7 @@ function red_postsbycategory() {
 			$the_query->the_post();
 				if ( has_post_thumbnail() ) {
 				$string .= '<li>';
-				$string .= '<a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_post_thumbnail($post_id, array( 50, 50) ) . get_the_title() .'</a></li>';
+				$string .= '<a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_post_thumbnail($post->ID, array( 50, 50) ) . get_the_title() .'</a></li>';
 				} else { 
 				// if no featured image is found
 				$string .= '<li><a href="' . get_the_permalink() .'" rel="bookmark">' . get_the_title() .'</a></li>';
@@ -198,7 +198,3 @@ function red_postsbycategory() {
 
 // Add a shortcode [categoryposts]
 add_shortcode('categoryposts', 'red_postsbycategory');
-
-// Enable shortcodes in text widgets
-add_filter('widget_text', 'do_shortcode');
-

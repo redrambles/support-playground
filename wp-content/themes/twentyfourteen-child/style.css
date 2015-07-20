@@ -1,13 +1,17 @@
 /*
- Theme Name:     Twenty Fourteen Child
- Theme URI:      http://www.elegantthemes.com/gallery/foxy/
- Description:    Twenty Fourteen Child Theme
- Template:       twentyfourteen
- Version:        1.0.0
+ * Theme Name:     Twenty Fourteen Child
+ * Theme URI:      http://www.elegantthemes.com/gallery/foxy/
+ * Description:    Twenty Fourteen Child Theme
+ * Template:       twentyfourteen
+ * Version:        1.0.0
+ * 
+ * Had named the child theme FOLDER - 'twenty-fourteen-child' but it wasn't working (had it ever worked this way? I think so!)
+ * Anyways - I renamed the child theme folder to 'twentyfourteen-child' and then it worked - but I couldn't save any additional
+ * changes in the text editor so I had to close the window and reopen. Very weird.
 */
 
 
-@import url("../twentyfourteen/style.css");
+/*@import url("../twentyfourteen/style.css");*/
 
 
 .movie-link {
@@ -23,7 +27,6 @@
 	list-style: none;
 }
 
-
 /* Post by category function (shortcode) */
 
 ul.postsbycategory {
@@ -31,7 +34,7 @@ list-style-type: none;
 }
 
 .postsbycategory img {
-float:left; 
+/*float:left; */
 padding:3px;
 margin:3px;
 border: 3px solid #EEE;

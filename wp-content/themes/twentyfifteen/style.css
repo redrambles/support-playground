@@ -5992,3 +5992,47 @@ p > video {
 		padding: 0;
 	}
 }
+
+/* Image credit */
+.after-post-section h3 {
+    color: #333;
+    font-size:1.3rem;
+    display:inline-block;
+    font-family: 'Noto Sans', sans-serif;
+    font-weight:700;
+    margin: 0 0 1em 0;
+    line-height: 1.2;
+    opacity:0.7;
+    text-transform: uppercase;
+    vertical-align: baseline;
+}
+ 
+.after-post-section h3::before {
+    content: "";
+    display: block;
+    width: 100%;
+    min-width: 30px;
+    border-top: 1px solid #ddd;
+    margin-bottom: 1em;
+}
+ 
+.after-post-section .section-content {
+    font-size: 0.8em;
+}
+
+/* Borderless */
+
+.borderless {
+    padding:0px;
+    box-shadow:none;
+    background:transparent;
+}
+ 
+.borderless .entry-content {
+    padding:0px; 
+}
+ 
+.borderless .entry-footer {
+    display:none;
+}
+
