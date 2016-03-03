@@ -40,7 +40,7 @@ printf( __( '<span class="meta-prep meta-prep-entry-date">Published </span> <spa
 									get_the_title( $post->post_parent )
 								);
 							?>
-		  <?php edit_post_link( __( 'Edit', 'twentytwelve' ), '<span class="edit-link">', '</span>' ); ?>
+		  <?php edit_post_link( __( 'Edit', 'mesocolumn' ), '<span class="edit-link">', '</span>' ); ?>
 
 
 </div>
@@ -75,7 +75,7 @@ else :
 endif;
 ?>
 								<a href="<?php echo esc_url( $next_attachment_url ); ?>" title="<?php the_title_attribute(); ?>" rel="attachment"><?php
-								$attachment_size = apply_filters( 'twentytwelve_attachment_size', array( 960, 960 ) );
+								$attachment_size = apply_filters( 'mesocolumn_attachment_size', array( 960, 960 ) );
 								echo wp_get_attachment_image( $post->ID, $attachment_size );
 								?></a>
 

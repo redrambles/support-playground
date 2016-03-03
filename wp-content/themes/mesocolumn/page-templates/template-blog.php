@@ -22,9 +22,9 @@ Template Name: Blog
 
 <?php
 global $page,$paged,$more; $more = 0;
-$post_custom_excerpt = get_theme_option('post_custom_excerpt');
-$post_excerpt_moretext = get_theme_option('post_excerpt_moretext');
-$post_blog_style = get_theme_option('blogpost_style');
+$post_custom_excerpt = get_theme_mod('post_custom_excerpt');
+$post_excerpt_moretext = get_theme_mod('post_excerpt_moretext');
+$post_blog_style = get_theme_mod('blogpost_style');
 
 $archive_excerpt = empty($post_custom_excerpt) ? '30' : $post_custom_excerpt;
 $excerpt_moretext = empty($post_excerpt_moretext) ? 'Continue Reading' : $post_excerpt_moretext;
@@ -41,7 +41,7 @@ query_posts("posts_per_page=$max_num_post&paged=$page");
 
 $oddpost = 'alt-post'; $postcount = 1;
 
-$feat_size = get_theme_option('feat_img_size');
+$feat_size = get_theme_mod('feat_img_size');
 $feat_size = isset($feat_size) ? $feat_size : 'thumbnail';
 $feat_size = apply_filters('meso_thumb_size', $feat_size);
 

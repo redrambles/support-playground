@@ -198,7 +198,7 @@ function twentyfifteen_fonts_url() {
 		$fonts_url = add_query_arg( array(
 			'family' => urlencode( implode( '|', $fonts ) ),
 			'subset' => urlencode( $subsets ),
-		), '//fonts.googleapis.com/css' );
+		), 'https://fonts.googleapis.com/css' );
 	}
 
 	return $fonts_url;
@@ -320,36 +320,6 @@ function twentyfifteen_nav_description( $item_output, $item, $depth, $args ) {
 }
 add_filter( 'walker_nav_menu_start_el', 'twentyfifteen_nav_description', 10, 4 );
 
-
-/** Add an image credit in posts - https://gist.github.com/redrambles/e78ebdb5e5a472c9a5f8 **/
-/** We could call it - optional quote **/
-
-add_action( 'the_content', 'my_image_credit', 12 );
-function my_image_credit( $content ) {
-	global $post;
-    if( is_singular() ) {
-    	$image_credit  = get_post_meta($post->ID, "image_credit", true);
-        if( !empty( $image_credit ) ) {
-            $content .= '<div class="after-post-section"><h3>Image Credit</h3><div class="section-content">' . $image_credit . '</div></div>';
-        }
-    }
-
-    return $content;
-}
-
-
-/** Add a class if this custom post field is 'true' */
-
-add_filter( 'post_class', 'borderless_post_class' );
-function borderless_post_class( $classes ) {
-     global $post;
-     $borderless  = get_post_meta($post->ID, "borderless", true);
-     if( $borderless == 'true') {
-          $classes[] = 'borderless';
-     }
-return $classes;
-}
-
 /**
  * Add a `screen-reader-text` class to the search form's submit button.
  *
@@ -362,32 +332,6 @@ function twentyfifteen_search_form_modify( $html ) {
 	return str_replace( 'class="search-submit"', 'class="search-submit screen-reader-text"', $html );
 }
 add_filter( 'get_search_form', 'twentyfifteen_search_form_modify' );
-
-/** Add a dashboard widget **/
-
-add_action( 'wp_dashboard_setup', 'engage_awesome_widget' );
-
-function engage_awesome_widget() {
-	wp_add_dashboard_widget (
-		'awesome_widget', /* id */
-		'Website Pearls of Wisdom', /* the title that will appear */
-		'my_awesome_widget' /* the name of the function */
-	);
-}
-
-function my_awesome_widget() { ?>
-	<h4>Hi there, super client!</h4>
-	<br>
-	<h4>Here are some important links:</h4>
-	<br>
-	<ul>
-		<li><a href="<?php echo admin_url("post-new.php") ?>">New Posts</a></li>
-		<li><a href="<?php echo admin_url("profile.php") ?>">Your Profile</a></li>	
-	</ul>
-	<br>
-	<p>Don't forget to have fun!</p>
-
-<?php }
 
 /**
  * Implement the Custom Header feature.

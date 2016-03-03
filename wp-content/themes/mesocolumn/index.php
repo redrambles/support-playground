@@ -1,14 +1,14 @@
 <?php get_header();
-$featcat1 = get_theme_option('side_feat_cat1');
-$featcat2 = get_theme_option('side_feat_cat2');
-$featcat3 = get_theme_option('side_feat_cat3');
-$featcat4 = get_theme_option('side_feat_cat4');
-$featcat5 = get_theme_option('side_feat_cat5');
-$featcat6 = get_theme_option('side_feat_cat6');
-$featcat7 = get_theme_option('side_feat_cat7');
-$featcat8 = get_theme_option('side_feat_cat8');
-$featcat9 = get_theme_option('side_feat_cat9');
-$featcat10 = get_theme_option('side_feat_cat10');
+$featcat1 = get_theme_mod('side_feat_cat1');
+$featcat2 = get_theme_mod('side_feat_cat2');
+$featcat3 = get_theme_mod('side_feat_cat3');
+$featcat4 = get_theme_mod('side_feat_cat4');
+$featcat5 = get_theme_mod('side_feat_cat5');
+$featcat6 = get_theme_mod('side_feat_cat6');
+$featcat7 = get_theme_mod('side_feat_cat7');
+$featcat8 = get_theme_mod('side_feat_cat8');
+$featcat9 = get_theme_mod('side_feat_cat9');
+$featcat10 = get_theme_mod('side_feat_cat10');
 ?>
 
 <?php do_action( 'bp_before_content' ); ?>

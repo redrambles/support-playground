@@ -3,10 +3,10 @@ global $post;
 $post_count = 1;
 $orig_post = $post;
 $tags = wp_get_post_tags($post->ID);
+$rel_count = get_theme_mod('related_count');
 
 	if ($tags) {
-    $related_num = get_theme_option('related_count');
-    $related_num = isset($related_num) ? $related_num : "3";
+    $related_num = !empty($rel_count) ? $rel_count : '3';
     $tag_ids = array();
 	foreach($tags as $individual_tag) $tag_ids[] = $individual_tag->term_id;
 	$args=array(
@@ -29,7 +29,7 @@ $tags = wp_get_post_tags($post->ID);
 	?>
 <div class="feat-cat-meta post-<?php the_ID(); ?><?php if($post_count == 2 || $post_count == 5) { echo ' feat-center'; } ?>">
 <div class="related-post-thumb">
-<?php echo dez_get_featured_post_image($thepostlink, "</a>", 250, 250, "aligncenter", "medium",dez_get_singular_cat('false'),the_title_attribute('echo=0'), false); ?>
+<?php echo dez_get_featured_post_image($thepostlink, "</a>", 250, 250, "aligncenter", "thumbnail",dez_get_image_alt_text(),the_title_attribute('echo=0'), false); ?>
 </div>
 <h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 </div>
@@ -44,8 +44,7 @@ echo '</div>';
 
 $categories = get_the_category($post->ID);
 if ($categories) {
-    $related_num = get_theme_option('related_count');
-    $related_num = isset($related_num) ? $related_num : "3";
+    $related_num = !empty($rel_count) ? $rel_count : '3';
     $category_ids = array();
 	foreach($categories as $individual_category) $category_ids[] = $individual_category->term_id;
 
@@ -68,7 +67,7 @@ if ($categories) {
 		?>
 <div class="feat-cat-meta post-<?php the_ID(); ?><?php if($post_count == 2 || $post_count == 5) { echo ' feat-center'; } ?>">
 <div class="related-post-thumb">
-<?php echo dez_get_featured_post_image($thepostlink, "</a>", 250, 250, "aligncenter", "medium" ,dez_get_singular_cat('false'), the_title_attribute('echo=0'), false); ?>
+<?php echo dez_get_featured_post_image($thepostlink, "</a>", 250, 250, "aligncenter", "thumbnail" ,dez_get_image_alt_text(), the_title_attribute('echo=0'), false); ?>
 </div>
 <h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
 </div>

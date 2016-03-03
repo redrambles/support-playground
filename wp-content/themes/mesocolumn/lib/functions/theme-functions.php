@@ -1,20 +1,7 @@
 <?php
-if( !function_exists( 'dez_get_my_custom_search_form' )):
-////////////////////////////////////////////////////////////////////
-// Custom search form
-///////////////////////////////////////////////////////////////////
-function dez_get_my_custom_search_form() { ?>
-<form role="search" method="get" id="searchform" action="<?php echo home_url( '/' ); ?>">
-<div><label class="screen-reader-text" for="s"><?php _e('Search for:', 'mesocolumn'); ?></label>
-<input type="text" id="s" name="s" value="<?php _e('Type and Press Enter', 'mesocolumn'); ?>" onfocus="if (this.value == '<?php _e('Type and Press Enter', 'mesocolumn'); ?>') {this.value = '';}" onblur="if (this.value == '') {this.value = '<?php _e('Type and Press Enter', 'mesocolumn'); ?>';}" tabindex="1" /></div></form>
-<?php }
-endif;
-
-
-
 if ( ! function_exists( 'dez_mp_theme_wp_title' ) ) :
 ///////////////////////////////////////////////////////////////////////////////////////
-// Custom WP TITLE - original code ( twentytwelve_wp_title() ) - Credit to WordPress Team
+// Custom WP TITLE - Credit to WordPress Team
 ///////////////////////////////////////////////////////////////////////////////////////
 function dez_mp_theme_wp_title( $title, $sep ) {
 global $paged, $page;
@@ -49,119 +36,6 @@ if ( function_exists('aioseop_load_modules') || function_exists('wpseo_admin_ini
 add_filter( 'wp_title', 'dez_mp_theme_wp_title', 10, 2 );
 }
 endif;
-
-
-///////////////////////////////////////////////////////////////////////////////////////
-// Custom WP Pagination original code ( woo_pagination() ) - Credit to WooCommerce code
-///////////////////////////////////////////////////////////////////////////////////////
-function dez_custom_woo_pagination( $args = array(), $query = '' ) {
-global $wp_rewrite, $wp_query;
-
-if ( $query ) {
-$wp_query = $query;
-} // End IF Statement
-/* If there's not more than one page, return nothing. */
-if ( 1 >= $wp_query->max_num_pages )
-return;
-
-		/* Get the current page. */
-		$current = ( get_query_var( 'paged' ) ? absint( get_query_var( 'paged' ) ) : 1 );
-
-		/* Get the max number of pages. */
-		$max_num_pages = intval( $wp_query->max_num_pages );
-
-		/* Set up some default arguments for the paginate_links() function. */
-		$defaults = array(
-			'base' => add_query_arg( 'paged', '%#%' ),
-			'format' => '',
-			'total' => $max_num_pages,
-			'current' => $current,
-			'prev_next' => true,
-			'prev_text' => __( '&laquo; Previous', 'mesocolumn' ), // Translate in WordPress. This is the default.
-			'next_text' => __( 'Next &raquo;', 'mesocolumn' ), // Translate in WordPress. This is the default.
-			'show_all' => false,
-			'end_size' => 1,
-			'mid_size' => 1,
-			'add_fragment' => '',
-			'type' => 'plain',
-			'before' => '<div class="wp-pagenavi iegradient">', // Begin woo_pagination() arguments.
-			'after' => '</div>',
-			'echo' => true,
-			'use_search_permastruct' => true
-		);
-
-		/* Allow themes/plugins to filter the default arguments. */
-		$defaults = apply_filters( 'custom_woo_pagination_args_defaults', $defaults );
-
-		/* Add the $base argument to the array if the user is using permalinks. */
-		if( $wp_rewrite->using_permalinks() && ! is_search() )
-			$defaults['base'] = user_trailingslashit( trailingslashit( get_pagenum_link() ) . 'page/%#%' );
-
-		/* Force search links to use raw permastruct for more accurate multi-word searching. */
-		if ( is_search() )
-			$defaults['use_search_permastruct'] = false;
-
-		/* If we're on a search results page, we need to change this up a bit. */
-		if ( is_search() ) {
-		/* If we're in BuddyPress, or the user has selected to do so, use the default "unpretty" URL structure. */
-			if ( class_exists( 'BP_Core_User' ) || $defaults['use_search_permastruct'] == false ) {
-
-				$search_query = get_query_var( 's' );
-				$paged = get_query_var( 'paged' );
-
-				$base = user_trailingslashit( home_url() ) . '?s=' . esc_attr( $search_query ) . '&paged=%#%';
-
-				$defaults['base'] = $base;
-			} else {
-				$search_permastruct = $wp_rewrite->get_search_permastruct();
-				if ( ! empty( $search_permastruct ) )
-					$defaults['base'] = user_trailingslashit( trailingslashit( urldecode( get_search_link() ) ) . 'page/%#%' );
-			}
-		}
-
-		/* Merge the arguments input with the defaults. */
-		$args = wp_parse_args( $args, $defaults );
-
-		/* Allow developers to overwrite the arguments with a filter. */
-		$args = apply_filters( 'custom_woo_pagination_args', $args );
-
-		/* Don't allow the user to set this to an array. */
-		if ( 'array' == $args['type'] )
-			$args['type'] = 'plain';
-
-		/* Make sure raw querystrings are displayed at the end of the URL, if using pretty permalinks. */
-		$pattern = '/\?(.*?)\//i';
-
-		preg_match( $pattern, $args['base'], $raw_querystring );
-
-		if( $wp_rewrite->using_permalinks() && $raw_querystring )
-		$raw_querystring[0] = str_replace( '', '', $raw_querystring[0] );
-
-        if(!empty($raw_querystring[0])):
-		@$args['base'] = str_replace( $raw_querystring[0], '', $args['base'] );
-		@$args['base'] .= substr( $raw_querystring[0], 0, -1 );
-        endif;
-
-		/* Get the paginated links. */
-		$page_links = paginate_links( $args );
-
-		/* Remove 'page/1' from the entire output since it's not needed. */
-		$page_links = str_replace( array( '&#038;paged=1\'', '/page/1\'' ), '\'', $page_links );
-
-		/* Wrap the paginated links with the $before and $after elements. */
-		$page_links = $args['before'] . $page_links . $args['after'];
-
-		/* Allow devs to completely overwrite the output. */
-		$page_links = apply_filters( 'custom_woo_pagination', $page_links );
-
-		/* Return the paginated links for use in themes. */
-		if ( $args['echo'] )
-			echo $page_links;
-		else
-			return $page_links;
-	} // End dez_custom_woo_pagination()
-
-
 
 
 
@@ -245,17 +119,14 @@ $cat_id = $cat_name->term_id;
 }
 
 if($cat_id) {
-$cat_value_option = 'tn_cat_color_' . $cat_id;
-$cat_bg_color = get_theme_option( $cat_value_option, 'cat' );
+$cat_bg_color = get_theme_mod( 'cat_color_'.$cat_id );
 $catname_val = ( !empty($cat_bg_color) ) ? "tn_cat_color_" . $cat_id : "";
 }
 
-
-$page_id = get_post_meta( $item->ID, '_menu_item_object_id', true ); 
+$page_id = get_post_meta( $item->ID, '_menu_item_object_id', true );
 
 if($page_id) {
-$page_value_option = 'tn_page_color_' . $page_id;
-$page_bg_color = get_theme_option( $page_value_option, 'page' );
+$page_bg_color = get_theme_mod( 'page_color_'.$page_id );
 $pagename_val = ( !empty($page_bg_color) ) ? "tn_page_color_" . $page_id : "";
 }
 
@@ -336,13 +207,15 @@ function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0)
             $item_output = $args->before;
 
             if($depth == 1):
-            $item_output .= "<option value='" . $item->url . "'>&nbsp;-- " . $item->title . "</option>";
+            $item_output .= "<li><a href='" . $item->url . "'>&nbsp;&nbsp;<i class='fa fa-minus'></i>" . $item->title . "</a></li>";
             elseif($depth == 2):
-            $item_output .= "<option value='" . $item->url . "'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- " . $item->title . "</option>";
+            $item_output .= "<li><a href='" . $item->url . "'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-angle-double-right'></i>" . $item->title . "</a></li>";
             elseif($depth == 3):
-            $item_output .= "<option value='" . $item->url . "'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-- " . $item->title . "</option>";
+            $item_output .= "<li><a href='" . $item->url . "'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-angle-right'></i>" . $item->title . "</a></li>";
+            elseif($depth == 4):
+            $item_output .= "<li><a href='" . $item->url . "'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class='fa fa-angle-down'></i>" . $item->title . "</a></li>";
             else:
-            $item_output .= "<option value='" . $item->url . "'>" . $item->title . "</option>";
+            $item_output .= "<li><a href='" . $item->url . "'>" . $item->title . "</a></li>";
             endif;
 
             $item_output .= $args->after;
@@ -353,8 +226,8 @@ function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0)
 
 
 
-function dez_get_wp_custom_mobile_nav_menu($get_custom_location='', $get_default_menu=''){
-$options = array('walker' => new mobi_custom_walker(), 'theme_location' => "$get_custom_location", 'menu_id' => '', 'echo' => false, 'container' => false, 'container_id' => '', 'fallback_cb' => "$get_default_menu");
+function dez_get_wp_custom_mobile_nav_menu($get_custom_location=''){
+$options = array('walker' => new mobi_custom_walker(), 'theme_location' => "$get_custom_location", 'menu_id' => '', 'echo' => false, 'container' => false, 'container_id' => '', 'fallback_cb' => "");
 $menu = wp_nav_menu($options);
 $menu_list = preg_replace( '#^<ul[^>]*>#', '', $menu );
 $menu_list2 = str_replace( array('<ul class="sub-menu">','<ul>','</ul>','</li>'), '', $menu_list );
@@ -370,33 +243,22 @@ function dez_revert_wp_mobile_menu_page() {
   }
 }
 
-
-function dez_get_mobile_navigation($type='', $nav_name='') {
-   $id = "{$type}-dropdown";
-  $js =<<<SCRIPT
-<script type="text/javascript">
- jQuery(document).ready(function(jQuery){
-  jQuery("select#{$id}").change(function(){
-    window.location.href = jQuery(this).val();
-  });
- });
-</script>
-SCRIPT;
-echo $js;
-$mobile_default_text = apply_filters('meso_mobilemenu_text',__('Where to?', 'mesocolumn'));
-echo "<select name=\"{$id}\" id=\"{$id}\">";
-echo "<option>" . $mobile_default_text . "</option>"; ?>
-<?php echo dez_get_wp_custom_mobile_nav_menu($get_custom_location=$nav_name, $get_default_menu='dez_revert_wp_mobile_menu_page'); ?>
-<?php echo "</select>"; }
-
-
-
+function dez_get_mobile_navigation($nav_name='') {
+echo '<div id="mobile-nav">';
+echo '<div class="mobile-open"><a class="mobile-open-click" href="#"><i class="fa fa-bars"></i>'. __(
+"Top Menu","mesocolumn") . '</a></div>';
+echo '<ul id="mobile-menu-wrap">';
+echo dez_get_wp_custom_mobile_nav_menu($nav_name);
+echo '</ul>';
+echo '</div>';
+}
 
 ////////////////////////////////////////////////////////////////////
 // Browser Detect
 ///////////////////////////////////////////////////////////////////
 function dez_get_browser_body_class($classes) {
 global $is_lynx, $is_gecko, $is_IE, $is_opera, $is_NS4, $is_safari, $is_chrome, $is_iphone;
+$customshop = get_theme_mod('custom_shop');
 if($is_lynx) $classes[] = 'lynx';
 elseif($is_gecko) $classes[] = 'gecko';
 elseif($is_opera) $classes[] = 'opera';
@@ -406,10 +268,23 @@ elseif($is_chrome) $classes[] = 'chrome';
 elseif($is_IE) $classes[] = 'ie';
 else $classes[] = 'unknown';
 if($is_iphone) $classes[] = 'iphone';
+if($customshop == 'enable') $classes[] = 'custom-shop-enable';
 return $classes;
 }
 add_filter('body_class','dez_get_browser_body_class');
 
+////////////////////////////////////////////////////////////////////
+// Check body class name by pages
+///////////////////////////////////////////////////////////////////
+function dez_get_current_body_class($name) {
+$boclass = get_body_class();
+//print_r($boclass);
+if (in_array($name, $boclass)) {
+return 'true';
+} else {
+return 'false';
+}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Get Recent Comments With Avatar
@@ -497,42 +372,47 @@ return $text;
 // excerpt the_content()
 ////////////////////////////////////////////////////////////////////////////////
 function dez_get_custom_the_excerpt($limit='',$more='') {
-$excerpt = explode(' ', get_the_excerpt(), $limit);
+global $post;
 $thepostlink = '<a class="readmore" href="'. get_permalink() . '" title="' . the_title_attribute('echo=0') . '">';
-  //remove caption tag
-  $excerpt = preg_replace('`\[[^\]]*\]`','',$excerpt);
-
-  //remove email tag
-  $pattern = "/[^@\s]*@[^@\s]*\.[^@\s]*/";
-  $replacement = "";
-  $excerpt = preg_replace($pattern, $replacement, $excerpt);
-
-  //remove link url tag
-  $pattern = "/[a-zA-Z]*[:\/\/]*[A-Za-z0-9\-_]+\.+[A-Za-z0-9\.\/%&=\?\-_]+/i";
-  $replacement = "";
-  $excerpt = preg_replace($pattern, $replacement, $excerpt);
-
-  if (count($excerpt)>=$limit) {
-    array_pop($excerpt);
-
-    if($more) {
-    $excerpt = implode(" ",$excerpt).'...'. $thepostlink.$more.'</a>';
+$custom_text = get_post_meta($post->ID,'post_custom_text',true);
+if($custom_text) {
+if($more) {
+    $excerpt = $custom_text . $thepostlink . $more . '</a>';
     } else {
-    $excerpt = implode(" ",$excerpt).'...';
+    $excerpt = $custom_text;
     }
+return $excerpt;
 
+} else {
 
-  } else {
-    $excerpt = implode(" ",$excerpt);
-  }
+$content = wp_strip_all_tags(get_the_content() , true );
+//remove caption tag
+$content_filter = preg_replace('`\[[^\]]*\]`','',$content);
+//remove email tag
+$pattern = "/[^@\s]*@[^@\s]*\.[^@\s]*/";
+$replacement = "";
+$content_filter = preg_replace($pattern, $replacement, $content_filter);
+//remove link url tag
+$pattern = "/[a-zA-Z]*[:\/\/]*[A-Za-z0-9\-_]+\.+[A-Za-z0-9\.\/%&=\?\-_]+/i";
+$replacement = "";
+$content_filter = preg_replace($pattern, $replacement, $content_filter);
 
-
-  return $excerpt;
+if($more) {
+    $excerpt = wp_trim_words($content_filter, $limit) . $thepostlink.$more.'</a>';
+    } else {
+    $excerpt = wp_trim_words($content_filter, $limit);
+    }
+return $excerpt;
 }
+}
+
+
 
 function dez_get_custom_the_content($limit) {
 global $id, $post;
-  $content = explode(' ', get_the_content(), $limit);
+$mycontent = get_the_content();
+if($mycontent) {
+  $content = explode(' ', $mycontent, $limit);
   if (count($content)>=$limit) {
     array_pop($content);
     $content = implode(" ",$content).'...';
@@ -544,6 +424,7 @@ global $id, $post;
   $content = str_replace(']]>', ']]&gt;', $content);
   $content = strip_tags($content, '<p>');
   return $content;
+  }
 }
 
 
@@ -597,6 +478,19 @@ return $final_import_image;
 }
 
 
+
+function dez_get_image_alt_text() {
+global $wpdb, $post, $posts;
+$image_id = get_post_thumbnail_id( get_the_ID() );
+$image_alt = get_post_meta($image_id, '_wp_attachment_image_alt', true);
+if( $image_alt ) {
+return $image_alt;
+} else {
+return the_title_attribute('echo=0');
+}
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // get featured images
 ////////////////////////////////////////////////////////////////////////////////
@@ -608,6 +502,7 @@ $image_url = wp_get_attachment_image_src($image_id,$size);
 $image_url = $image_url[0];
 $current_theme = wp_get_theme();
 $swt_post_thumb = get_post_meta($post->ID, 'thumbnail_html', true);
+$smart_image = get_theme_mod('first_feat_img');
 
 $first_img = '';
 ob_start();
@@ -632,13 +527,13 @@ return $before . "<img width='" . $width . "' height='". $height . "' class='" .
 /* check image attach or uploaded to post */
 $images = dez_echo_first_image( $post->ID, $size );
 
-if($images) {
+if($images && $smart_image == 'enable') {
 
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $images . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 
 } else {
 
-if($first_img) {
+if($first_img && $smart_image == 'enable') {
 
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $first_img . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 
@@ -649,8 +544,9 @@ if($default == 'true'):
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . get_template_directory_uri() . '/images/post-default.png' . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 endif;
 
-
 }
+
+
 }
 
 }
@@ -670,6 +566,7 @@ $image_url = wp_get_attachment_image_src($image_id,$size);
 $image_url = $image_url[0];
 $current_theme = wp_get_theme();
 $swt_post_thumb = get_post_meta($post->ID, 'thumbnail_html', true);
+$smart_image = get_theme_mod('first_feat_img');
 
 $first_img = '';
 ob_start();
@@ -695,13 +592,13 @@ return $before . "<img width='" . $width . "' height='". $height . "' class='" .
 /* check image attach or uploaded to post */
 $images = dez_echo_first_image( $post->ID, $size );
 
-if($images) {
+if($images && $smart_image == 'enable') {
 
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $images . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 
 } else {
 
-if($first_img) {
+if($first_img && $smart_image == 'enable') {
 return $before . "<img width='" . $width . "' height='". $height . "' class='" . $class . "' src='" . $first_img . "' alt='" . $alt . "' title='" . $title . "' />" . $after;
 } else {
 if($default == 'true'):
@@ -734,19 +631,24 @@ return $thePostID;
 ////////////////////////////////////////////////////////////////////////////////
 function dez_get_has_thumb_class($classes) {
 global $post;
+$smart_image = get_theme_mod('first_feat_img');
 $swt_post_thumb = get_post_meta($post->ID, 'thumbnail_html', true);
 $first_img = '';
 ob_start();
 ob_end_clean();
 $output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
-if($output) {
+if($output && $smart_image == 'enable') {
 $first_img = $matches[1][0];
 } else {
 $first_img = '';
 }
 
 /* check image attach or uploaded to post */
+if( $smart_image == 'enable') {
 $upload_images = dez_echo_first_image( $post->ID, 'thumbnail' );
+} else {
+$upload_images = '';
+}
 
 if( has_post_thumbnail($post->ID) || !empty($first_img) || !empty($swt_post_thumb) || !empty($upload_images) ) {
 $classes[] = 'has_thumb';
@@ -764,17 +666,22 @@ add_filter('post_class', 'dez_get_has_thumb_class');
 function dez_get_has_thumb_check() {
 global $post;
 $swt_post_thumb = get_post_meta($post->ID, 'thumbnail_html', true);
+$smart_image = get_theme_mod('first_feat_img');
 $first_img = '';
 ob_start();
 ob_end_clean();
 $output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
-if($output) {
+if($output && $smart_image == 'enable') {
 $first_img = $matches[1][0];
 } else {
 $first_img = '';
 }
 /* check image attach or uploaded to post */
+if( $smart_image == 'enable') {
 $upload_images = dez_echo_first_image( $post->ID, 'thumbnail' );
+} else {
+$upload_images = '';
+}
 
 if( has_post_thumbnail($post->ID) || !empty($first_img) || !empty($swt_post_thumb) || !empty($upload_images) ) {
 $output = 'has_thumb';
@@ -1036,11 +943,26 @@ return $ptype;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// get all available taxonomy
+////////////////////////////////////////////////////////////////////////////////
+function dez_get_all_taxonomy() {
+$ptax = array();
+$allptype = dez_get_all_posttype();
+foreach( $allptype as $type) {
+$post_taxo = get_object_taxonomies($type);
+foreach($post_taxo  as $taxo) {
+$ptax[] = $taxo;
+}
+}
+return $ptax;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // change the excerpt length limit
 ////////////////////////////////////////////////////////////////////////////////
 function dez_custom_excerpt_length($length) {
-$myexcerpt = get_theme_option('post_custom_excerpt');
-if($myexcerpt) {
+$myexcerpt = get_theme_mod('post_custom_excerpt');
+if(!empty($myexcerpt)) {
 return $myexcerpt;
 } else {
 return 30;
@@ -1058,14 +980,40 @@ global $authordata;
 // modify this as you like - so far exactly the same as in the original core function
 // if you simply want to add something to the existing link, use ".=" instead of "=" for $link
     $link = sprintf(
-        '<a class="url fn n" href="%1$s" title="%2$s" rel="author">%3$s</a>',
-        get_author_posts_url( $authordata->ID, $authordata->nickname ),
+        '<a class="url fn" href="%1$s" title="%2$s" rel="author">%3$s</a>',
+        get_author_posts_url( $authordata->ID, $authordata->user_nicename ),
         esc_attr( sprintf( __( 'Posts by %s', 'mesocolumn' ), get_the_author() ) ),
         get_the_author()
     );
 return $link;
 }
 add_filter( 'the_author_posts_link', 'dez_add_hatom_author_entry' );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Add Theme Data
+////////////////////////////////////////////////////////////////////////////////
+function meso_get_theme_data($data) {
+$theme_data = wp_get_theme();
+if($data == 'ThemeURI' || $data == 'Author URI' || $data == 'TextDomain'){
+$the_theme_data = $theme_data->get($data);
+} else {
+$the_theme_data = $theme_data->$data;
+}
+return $the_theme_data;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Add Child Path File Detect
+////////////////////////////////////////////////////////////////////////////////
+function meso_get_child_file($file_path) {
+if( is_child_theme() && 'mesocolumn' == get_template() && file_exists( get_stylesheet_directory() . $file_path )) {
+$realpath = get_stylesheet_directory_uri() . $file_path;
+} elseif( file_exists( get_template_directory() . $file_path ) ) {
+$realpath = get_template_directory_uri() . $file_path;
+}
+return $realpath;
 }
 
 

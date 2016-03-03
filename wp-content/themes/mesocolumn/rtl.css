@@ -1,4 +1,5 @@
 body {direction: rtl;unicode-bidi: embed;text-align:right;}
+html {overflow-y: scroll;overflow-x: hidden;overflow: -moz-scrollbars-vertical;} 
 .sf-menu li {float: right;}
 #siteinfo {float: right;text-align:right;}
 #topbanner {float: left;}
@@ -29,3 +30,5 @@ p.logged-in-as a {display:inline;}
 #post-entry article .post-more a {float:right;}
 aside.home-feat-cat .apost img.alignleft {float:right;margin:0;padding:0;}
 aside.home-feat-cat .apost .feat-right {margin: 0em 140px 0em 0px;}
+.jdGallery .slideInfoZone h3{text-align:right;}
+.widget-area aside ul li ul li {padding: 0px 15px 0px 0px;background: url(images/children-rtl.png) no-repeat right 3px;}

@@ -1,4 +1,4 @@
-<?php if ( get_the_author_meta( 'description' ) ) : // ?>
+<?php if ( get_the_author_meta( 'description' ) ) : ?>
 <div id="author-bio">
 <div id="author-avatar">
 <?php echo get_avatar( get_the_author_meta( 'user_email' ), 68 ); ?>

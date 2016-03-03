@@ -1,0 +1,7 @@
+== Changelog ==
+
+= 1.0.1 - July 27, 2015 =
+* Updates to readme
+
+= 1.0 - June 11, 2015 =
+* Initial release

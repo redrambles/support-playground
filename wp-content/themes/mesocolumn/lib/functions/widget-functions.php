@@ -3,7 +3,6 @@
 // Sidebar Widget
 ////////////////////////////////////////////////////////////////////////////////
 function mesocolumn_theme_widgets_init() {
-global $bp_active;
 
    register_sidebar(array(
     'name'=>__('Tabbed Sidebar', 'mesocolumn'),
@@ -25,70 +24,6 @@ global $bp_active;
 	'before_title' => '<h3 class="widget-title">',
 	'after_title' => '</h3>',
 	));
-
-
-    if ( class_exists('woocommerce') ) {
-   register_sidebar(array(
-    'name'=>__('Shop Sidebar', 'mesocolumn'),
-    'id' => 'shop-sidebar',
-	'description' => __( 'Widget area for WooCommerce Shop Pages', 'mesocolumn' ),
-	'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-	'after_widget' => '</aside>',
-	'before_title' => '<h3 class="widget-title">',
-	'after_title' => '</h3>',
-	));
-    }
-
-
-    if ( class_exists('jigoshop') ) {
-   register_sidebar(array(
-    'name'=>__('Shop Sidebar', 'mesocolumn'),
-    'id' => 'shop-sidebar',
-	'description' => __( 'Widget area for Jigo Shop Pages', 'mesocolumn' ),
-	'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-	'after_widget' => '</aside>',
-	'before_title' => '<h3 class="widget-title">',
-	'after_title' => '</h3>',
-	));
-    }
-
-   if ( post_type_exists( 'portfolio' ) ) {
-   register_sidebar(array(
-    'name'=>__('Portfolio Sidebar', 'mesocolumn'),
-    'id' => 'portfolio-sidebar',
-	'description' => __( 'Widget area for Portfolio Pages', 'mesocolumn' ),
-	'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-	'after_widget' => '</aside>',
-	'before_title' => '<h3 class="widget-title">',
-	'after_title' => '</h3>',
-	));
-    }
-
-
-   if ( class_exists( 'bbPress' ) ) {
-   register_sidebar(array(
-    'name'=>__('Forum Sidebar', 'mesocolumn'),
-    'id' => 'forum-sidebar',
-	'description' => __( 'Widget area for BBPress Forum Pages', 'mesocolumn' ),
-	'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-	'after_widget' => '</aside>',
-	'before_title' => '<h3 class="widget-title">',
-	'after_title' => '</h3>',
-	));
-    }
-
-
-    if ( $bp_active == 'true' ) {
-   register_sidebar(array(
-    'name'=>__('BuddyPress Sidebar', 'mesocolumn'),
-    'id' => 'buddypress-sidebar',
-	'description' => __( 'Widget area for BuddyPress Pages', 'mesocolumn' ),
-	'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-	'after_widget' => '</aside>',
-	'before_title' => '<h3 class="widget-title">',
-	'after_title' => '</h3>',
-	));
-    }
 
 	register_sidebar(array(
 		'name'=>__('First Footer Widget Area', 'mesocolumn'),
@@ -131,7 +66,6 @@ global $bp_active;
 	) );
 
 }
-
 add_action( 'widgets_init', 'mesocolumn_theme_widgets_init' );
 
 
@@ -139,13 +73,14 @@ add_action( 'widgets_init', 'mesocolumn_theme_widgets_init' );
 ///////////////////////////////////////////////////////////////////////////////////
 ////custom most commented post widget
 ///////////////////////////////////////////////////////////////////////////////////
-class My_THEME_Most_Commented_Widget extends WP_Widget {
-function My_THEME_Most_Commented_Widget() {
+class MESO_Most_Commented_Widget extends WP_Widget {
+function __construct()  {
 //Constructor
-parent::WP_Widget(false, $name = __('Most Comments', 'mesocolumn'), array(
+parent::__construct(false, $name = __('Most Comments', 'mesocolumn'), array(
 'description' => __('Display your most commented posts.', 'mesocolumn')
 ));
 }
+
 function widget($args, $instance) {
 // outputs the content of the widget
 extract($args); // Make before_widget, etc available.
@@ -203,16 +138,16 @@ $mc_comment_count = isset($instance['commentcount']) ? $instance['commentcount']
 <?php
 }
 }
-register_widget('My_THEME_Most_Commented_Widget');
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////
 ////wordpress and buddypress recent comment widget
 ///////////////////////////////////////////////////////////////////////////////////
-class My_THEME_Recent_Comments_Widget extends WP_Widget {
-function My_THEME_Recent_Comments_Widget() {
+class MESO_Recent_Comments_Widget extends WP_Widget {
+function __construct() {
 //Constructor
-parent::WP_Widget(false, $name = __('Recent Gravatar Comments', 'mesocolumn'), array(
+parent::__construct(false, $name = __('Recent Gravatar Comments', 'mesocolumn'), array(
 'description' => __('Display your recent comments with user avatar.', 'mesocolumn')
 ));
 }
@@ -295,17 +230,17 @@ $rc_avatar = isset($instance['avatar_on']) ? $instance['avatar_on'] : "";
 <?php
 }
 }
-register_widget('My_THEME_Recent_Comments_Widget');
+
 
 
 //////////////////////////////////////////////////////////////////////////
 // Multi Category Featured Posts Widget
 ///////////////////////////////////////////////////////////////////////////
-class My_THEME_Featured_Multi_Category_Widget extends WP_Widget {
-function My_THEME_Featured_Multi_Category_Widget() {
+class MESO_Featured_Multi_Category_Widget extends WP_Widget {
+function __construct() {
 //Constructor
-parent::WP_Widget(false, $name = __('Featured Categories', 'mesocolumn'), array(
-'description' => __('Displays multi category posts with thumbnail.', 'mesocolumn')
+parent::__construct(false, $name = __('Featured Categories', 'mesocolumn'), array(
+'description' => __('Display your featured category listing.', 'mesocolumn')
 ));
 }
 function widget($args, $instance) {
@@ -317,7 +252,14 @@ $feat_title = empty($instance['title']) ? __('Featured Categories', 'mesocolumn'
 
 $feat_name = isset($instance['featcatname']) ? $instance['featcatname'] : "";
 $feat_thumb = isset($instance['featthumb']) ? $instance['featthumb'] : "";
-$feat_thumb_size = isset($instance['featthumbsize']) ? $instance['featthumbsize'] : "thumbnail";
+
+if($feat_thumb == 'yes') {
+$feat_thumb_size = isset($instance['featthumbsize']) ? $instance['featthumbsize'] : "";
+} else {
+$feat_thumb_size = 'thumb_off';
+}
+
+$feat_data = isset($instance['featdata']) ? $instance['featdata'] : "";
 $feat_total = isset($instance['feattotal']) ? $instance['feattotal'] : "";
 
 $unique_id = $args['widget_id'];
@@ -326,7 +268,7 @@ echo $before_widget;
 
 echo $before_title . $feat_title . $after_title;
 
-echo "<ul class='recent-postcat'>";
+echo "<ul class='featured-cat-posts'>";
 $my_query = new WP_Query('cat='. $feat_name . '&' . 'showposts=' . $feat_total);
 while ($my_query->have_posts()) : $my_query->the_post();
 $do_not_duplicate = $post->ID;
@@ -337,15 +279,16 @@ $thepostlink = '<a href="'. get_permalink() . '" title="' . the_title_attribute(
 <li class="<?php echo dez_get_has_thumb_check(); ?> <?php echo 'the-sidefeat-'.$feat_thumb_size; ?>">
 <?php if($feat_thumb == 'yes') { ?>
 <?php if($feat_thumb_size == '' || $feat_thumb_size == 'thumbnail'): ?>
-<?php echo dez_get_featured_post_image($thepostlink,'</a>',50,50,'featpost alignleft','thumbnail', dez_get_singular_cat('false'), the_title_attribute('echo=0'), false); ?>
+<?php echo dez_get_featured_post_image($thepostlink,'</a>',50,50,'featpost alignleft','thumbnail',dez_get_image_alt_text(), the_title_attribute('echo=0'), false); ?>
 <?php else: ?>
-<?php echo dez_get_featured_post_image('<div class="medium-thumb"><p>'.$thepostlink,'</a></p></div>',480,320,'featpost alignleft','medium', dez_get_singular_cat('false'), the_title_attribute('echo=0'), false); ?>
+<?php echo dez_get_featured_post_image(''.$thepostlink,'</a>',480,320,'featpost alignleft','medium', dez_get_image_alt_text(), the_title_attribute('echo=0'), false); ?>
 <?php endif; ?>
 <?php } ?>
 <div class="feat-post-meta">
-<div class="feat-title"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></div>
-<small><?php echo the_time( get_option( 'date_format' ) ); ?><?php if ( comments_open() ) { ?><span class="widget-feat-comment"> - <?php comments_popup_link(__('No Comment','mesocolumn'), __('1 Comment','mesocolumn'), __('% Comments','mesocolumn') ); ?></span><?php } ?>
-</small>
+<h5 class="feat-title"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+<?php if($feat_data != 'disable') { ?>
+<div class="feat-meta"><small><?php echo the_time( get_option( 'date_format' ) ); ?><?php if ( comments_open() ) { ?><span class="widget-feat-comment"> - <?php comments_popup_link(__('No Comment','mesocolumn'), __('1 Comment','mesocolumn'), __('% Comments','mesocolumn') ); ?></span><?php } ?></small></div>
+<?php } ?>
 </div>
 </li>
 <?php endwhile; wp_reset_query(); ?>
@@ -367,6 +310,7 @@ $feat_name = isset($instance['featcatname']) ? $instance['featcatname'] : "";
 $feat_thumb_size = isset($instance['featthumbsize']) ? $instance['featthumbsize'] : "";
 $feat_thumb = isset($instance['featthumb']) ? $instance['featthumb'] : "";
 $feat_total = isset($instance['feattotal']) ? $instance['feattotal'] : "";
+$feat_data = isset($instance['featdata']) ? $instance['featdata'] : "";
 ?>
 
 
@@ -378,7 +322,7 @@ $feat_total = isset($instance['feattotal']) ? $instance['feattotal'] : "";
 <input type="text" class="widefat" id="<?php echo $this->get_field_id('featcatname'); ?>" name="<?php echo $this->get_field_name('featcatname'); ?>" value="<?php echo $feat_name; ?>" />
 </p>
 
-<p><label for="<?php echo $this->get_field_id('featthumb'); ?>"><?php _e('Enable Thumbnails?:<br /><em>*post featured images</em>', 'mesocolumn'); ?>    </label>
+<p><label for="<?php echo $this->get_field_id('featthumb'); ?>"><?php _e('Enable Thumbnails?:<br /><em>*post featured images</em>', 'mesocolumn'); ?></label>
 <select class="widefat" id="<?php echo $this->get_field_id('featthumb'); ?>" name="<?php echo $this->get_field_name('featthumb'); ?>">
 <option<?php if($feat_thumb == 'yes') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('featthumb'); ?>" value="yes"><?php _e('yes', 'mesocolumn'); ?></option>
 <option<?php if($feat_thumb== 'no') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('featthumb'); ?>" value="no"><?php _e('no', 'mesocolumn'); ?></option>
@@ -392,83 +336,169 @@ $feat_total = isset($instance['feattotal']) ? $instance['feattotal'] : "";
 </select>
 </p>
 
+
+<p><label for="<?php echo $this->get_field_id('featdata'); ?>"><?php _e('Enable Post Meta?:<br /><em>*post date and post comments count</em>', 'mesocolumn'); ?></label>
+<select class="widefat" id="<?php echo $this->get_field_id('featdata'); ?>" name="<?php echo $this->get_field_name('featdata'); ?>">
+<option<?php if($feat_data == 'enable') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('featdata'); ?>" value="enable"><?php _e('Enable', 'mesocolumn'); ?></option>
+<option<?php if($feat_data == 'disable') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('featdata'); ?>" value="disable"><?php _e('Disable', 'mesocolumn'); ?></option>
+</select>
+</p>
+
 <p><label for="<?php echo $this->get_field_id('feattotal'); ?>"><?php _e("Total:",'mesocolumn'); ?></label> <br />
 <input class="widefat" id="<?php echo $this->get_field_id('feattotal'); ?>" name="<?php echo $this->get_field_name('feattotal'); ?>" type="text" value="<?php echo $feat_total; ?>" />
 </p>
-
 <?php
 }
 }
-register_widget('My_THEME_Featured_Multi_Category_Widget');
+
+/*--------------------------------------------
+Multi Custom Post Type Featured Posts Widget
+---------------------------------------------*/
+class MESO_Featured_Multi_CPT_Widget extends WP_Widget {
+function __construct() {
+//Constructor
+parent::__construct(false, $name = __('Custom Post Type', 'mesocolumn'), array(
+'description' => __('Display your custom post type listing.', 'mesocolumn')
+));
+}
+function widget($args, $instance) {
+global $bp_existed, $post;
+// outputs the content of the widget
+extract($args);
+// Make before_widget, etc available.
+$cpt_title = empty($instance['title']) ? __('Custom Posts', 'mesocolumn') : apply_filters('widget_title', $instance['title']);
+$cpt_name = isset($instance['cptname']) ? $instance['cptname'] : "";
+$cpt_thumb = isset($instance['cptthumb']) ? $instance['cptthumb'] : "";
+
+if($cpt_thumb == 'yes') {
+$cpt_thumb_size = isset($instance['cptthumbsize']) ? $instance['cptthumbsize'] : "";
+} else {
+$cpt_thumb_size = 'thumb_off';
+}
+
+$cpt_data = isset($instance['cptdata']) ? $instance['cptdata'] : "";
+$cpt_total = isset($instance['cpttotal']) ? $instance['cpttotal'] : "";
+$unique_id = $args['widget_id'];
+echo $before_widget;
+echo $before_title . $cpt_title . $after_title;
+echo "<ul class='featured-cat-posts'>";
+$my_query = new WP_Query('post_type='. $cpt_name . '&' . 'showposts=' . $cpt_total);
+while ($my_query->have_posts()) : $my_query->the_post();
+$do_not_duplicate = $post->ID;
+$the_post_ids = get_the_ID();
+$thepostlink = '<a href="'. get_permalink() . '" title="' . the_title_attribute('echo=0') . '">';
+?>
+<li class="<?php echo dez_get_has_thumb_check(); ?> <?php echo 'the-sidefeat-'.$cpt_thumb_size; ?>">
+<?php if($cpt_thumb == 'yes') { ?>
+<?php if($cpt_thumb_size == '' || $cpt_thumb_size == 'thumbnail'): ?>
+<?php echo dez_get_featured_post_image($thepostlink,'</a>',50,50,'featpost alignleft','thumbnail',dez_get_image_alt_text(), the_title_attribute('echo=0'), false); ?>
+<?php else: ?>
+<?php echo dez_get_featured_post_image(''.$thepostlink,'</a>',480,320,'featpost alignleft','medium', dez_get_image_alt_text(), the_title_attribute('echo=0'), false); ?>
+<?php endif; ?>
+<?php } ?>
+<div class="feat-post-meta">
+<h5 class="feat-title"><a href="<?php the_permalink() ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h5>
+<?php if($cpt_data != 'disable') { ?>
+<div class="feat-meta"><small><?php echo the_time( get_option( 'date_format' ) ); ?><?php if ( comments_open() ) { ?><span class="widget-feat-comment"> - <?php comments_popup_link(__('No Comment','mesocolumn'), __('1 Comment','mesocolumn'), __('% Comments','mesocolumn') ); ?></span><?php } ?></small></div>
+<?php } ?>
+</div>
+</li>
+<?php endwhile; wp_reset_postdata(); ?>
+<?php
+echo "</ul>";
+echo $after_widget;
+// end echo result
+}
 
 
-function dez_theme_widget_bannerads() { get_template_part('lib/templates/advertisement'); }
-wp_register_sidebar_widget( TEMPLATE_DOMAIN.'_banner_ads','Banner Ads', 'dez_theme_widget_bannerads','' );
+function update($new_instance, $old_instance) {
+//update and save the widget
+return $new_instance;
+}
+function form($instance) {
+// Get the options into variables, escaping html characters on the way
+$cpt_title = isset($instance['title']) ? $instance['title'] : "";
+$cpt_name = isset($instance['cptname']) ? $instance['cptname'] : "";
+$cpt_thumb = isset($instance['cptthumb']) ? $instance['cptthumb'] : "";
+$cpt_thumb_size = isset($instance['cptthumbsize']) ? $instance['cptthumbsize'] : "";
+$cpt_data = isset($instance['cptdata']) ? $instance['cptdata'] : "";
+$cpt_total = isset($instance['cpttotal']) ? $instance['cpttotal'] : "";
+?>
 
-function dez_theme_widget_tabber() { get_template_part('lib/templates/tabber-widget'); }
-wp_register_sidebar_widget( TEMPLATE_DOMAIN.'_tabbed','Tabber', 'dez_theme_widget_tabber','' );
 
-function dez_theme_widget_right_sidebar_ads() {
-$get_ads_right_sidebar = get_theme_option('ads_right_sidebar'); if($get_ads_right_sidebar != '')  { ?>
+<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e("Title:",'mesocolumn'); ?> <em><?php _e("*required",'mesocolumn'); ?></em></label>
+<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $cpt_title; ?>" />
+</p>
+<p><label for="<?php echo $this->get_field_id('cptname'); ?>"><?php _e("Select Custom Post Type:",'mesocolumn'); ?></label>
+<select class="widefat" id="<?php echo $this->get_field_id('cptname'); ?>" name="<?php echo $this->get_field_name('cptname'); ?>">
+<?php
+$all_cpt = dez_get_all_posttype();
+if($all_cpt) {
+foreach($all_cpt as $cpts) {
+if($cpt_name == $cpts) { $is_selected = ' selected="selected" '; } else { $is_selected = ""; }
+$cptlist = '<option '. $is_selected . 'name="'.$this->get_field_name('cptname').'" value="'.$cpts.'">'. $cpts. '</option>';
+echo $cptlist;
+}
+}
+?>
+</select>
+</p>
+
+<p><label for="<?php echo $this->get_field_id('cptthumb'); ?>"><?php _e('Enable Thumbnails?:<br /><em>*post featured images</em>', 'mesocolumn'); ?></label>
+<select class="widefat" id="<?php echo $this->get_field_id('cptthumb'); ?>" name="<?php echo $this->get_field_name('cptthumb'); ?>">
+<option<?php if($cpt_thumb == 'yes') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('cptthumb'); ?>" value="yes"><?php _e('yes', 'mesocolumn'); ?></option>
+<option<?php if($cpt_thumb== 'no') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('cptthumb'); ?>" value="no"><?php _e('no', 'mesocolumn'); ?></option>
+</select>
+</p>
+
+<p><label for="<?php echo $this->get_field_id('cptthumbsize'); ?>"><?php _e('Thumbnails Size?:', 'mesocolumn'); ?>    </label>
+<select class="widefat" id="<?php echo $this->get_field_id('cptthumbsize'); ?>" name="<?php echo $this->get_field_name('cptthumbsize'); ?>">
+<option<?php if($cpt_thumb_size == 'thumbnail') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('cptthumbsize'); ?>" value="thumbnail"><?php _e('thumbnail', 'mesocolumn'); ?></option>
+<option<?php if($cpt_thumb_size == 'medium') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('cptthumbsize'); ?>" value="medium"><?php _e('medium', 'mesocolumn'); ?></option>
+</select>
+</p>
+
+<p><label for="<?php echo $this->get_field_id('cptdata'); ?>"><?php _e('Enable Post Meta?:<br /><em>*post date and post comments count</em>', 'mesocolumn'); ?></label>
+<select class="widefat" id="<?php echo $this->get_field_id('cptdata'); ?>" name="<?php echo $this->get_field_name('cptdata'); ?>">
+<option<?php if($cpt_data == 'enable') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('cptdata'); ?>" value="enable"><?php _e('Enable', 'mesocolumn'); ?></option>
+<option<?php if($cpt_data == 'disable') { echo " selected='selected'"; } ?> name="<?php echo $this->get_field_name('cptdata'); ?>" value="disable"><?php _e('Disable', 'mesocolumn'); ?></option>
+</select>
+</p>
+
+<p><label for="<?php echo $this->get_field_id('cpttotal'); ?>"><?php _e("Total:",'mesocolumn'); ?></label> <br />
+<input class="widefat" id="<?php echo $this->get_field_id('cpttotal'); ?>" name="<?php echo $this->get_field_name('cpttotal'); ?>" type="text" value="<?php echo $cpt_total; ?>" />
+</p>
+<?php
+}
+}
+
+/*--------------------------------------------
+Description: add tabber widget
+---------------------------------------------*/
+function meso_theme_widget_tabber() { get_template_part('lib/templates/tabber-widget'); }
+wp_register_sidebar_widget( 'mesocolumn_tabbed','Tabber', 'meso_theme_widget_tabber','' );
+
+/*--------------------------------------------
+Description: add right sidebar ad widget
+---------------------------------------------*/
+function meso_theme_widget_right_sidebar_ads() {
+$get_ads_right_sidebar = get_theme_mod('ads_right_sidebar'); if($get_ads_right_sidebar)  { ?>
 <aside id="ctr-ad" class="widget">
 <div class="textwidget adswidget"><?php echo stripcslashes(do_shortcode($get_ads_right_sidebar)); ?></div>
 </aside>
 <?php }
 }
-wp_register_sidebar_widget( TEMPLATE_DOMAIN .'_ads_right', 'Ads Right', 'dez_theme_widget_right_sidebar_ads','' );
+wp_register_sidebar_widget( 'mesocolumn_ads_right', 'Ads Right', 'meso_theme_widget_right_sidebar_ads','' );
 
-
-function dez_meso_custom_sidebar_ads() {
-echo '<aside id="ctr-ad" class="widget"><div class="textwidget adswidget">';
-if( is_home() ) { ?>
-=== your home html or script ads ===
-<?php } elseif ( is_category('eat') ) { ?>
-=== your cat1 html or script ad code ====
-<?php } elseif ( is_category('fashion') ) { ?>
-=== your cat2 html or script ad code ====
-<?php } else { //other category not specifiy ?>
-=== your other cat html or script ad code ====
-<?php }
-echo '</div></aside>';
+/*--------------------------------------------
+Description: register custom widget
+---------------------------------------------*/
+function meso_register_custom_widget() {
+register_widget('MESO_Most_Commented_Widget');
+register_widget('MESO_Recent_Comments_Widget');
+register_widget('MESO_Featured_Multi_CPT_Widget');
+register_widget('MESO_Featured_Multi_Category_Widget');
 }
-//wp_register_sidebar_widget( 'meso_custom_conditional_adright', 'Custom Ads Right', 'dez_meso_custom_sidebar_ads','' );
-
-
-
-///////////////////////////////////////////////////////////////////////////////////
-//// Widget CSS
-///////////////////////////////////////////////////////////////////////////////////
-function dez_add_widget_style_admin_head() {
-print "<style type='text/css' media='screen'>"; ?>
-.widget-content em { font-style:normal; color: #999; font-size: 11px; line-height:auto !important;  }
-<?php print "</style>";
-}
-function dez_add_widget_style_head() {
-print "<style type='text/css' media='screen'>"; ?>
-.gravatar_recent_comment li, .twitterbox li { padding:0px; font-size: 1.025em; line-height:1.5em;  }
-.gravatar_recent_comment span.author { font-weight:bold; }
-.gravatar_recent_comment img { width:50px; height:50px; float:left; margin: 0 10px 0 0; }
-ul.recent-postcat li {position:relative;border-bottom: 1px solid #EAEAEA;padding: 0 0 0.5em !important;margin: 0 0 1em !important;}
-ul.recent-postcat li:last-child,ul.item-list li:last-child,.avatar-block li:last-child  { border-bottom: none;  }
-ul.recent-postcat li .feat-post-meta { margin: 0px 0 0 68px; }
-ul.recent-postcat li.has_no_thumb .feat-post-meta { margin: 0px; }
-ul.recent-postcat img {background: white;padding: 5px;margin:0px;border: 1px solid #DDD;}
-#custom #right-sidebar ul.recent-postcat li .feat-post-meta .feat-title {margin: 0;}
-#custom #right-sidebar ul.recent-postcat li .feat-post-meta .feat-title {width: 100%;font-size: 1.05em; line-height:1.35em !important;font-weight: bold;}
-ul.recent-postcat li .feat-post-meta small { font-size: 0.85em; padding:0; }
-ul.recent-postcat li .feat-post-meta small .widget-feat-comment {display:none;}
-.bp-searchform {margin: 0px;padding: 5%;float: left;width: 90%;background: white;border: 1px solid #DDD;}
-.bp-searchform label {display:none;}
-#custom div.medium-thumb {margin:0 0 0.2em;width:99%;overflow:hidden;padding:0 !important;border:0 none !important;}
-#custom div.medium-thumb p {text-align:center;margin:0;width:100%;padding:0;border:0 none;height:100%;overflow:hidden;}
-#custom div.medium-thumb img {float:none;border:0 none;max-width:100%;margin:0 !important;padding:0 !important;}
-ul.recent-postcat li.the-sidefeat-thumbnail img {padding:3px !important;border:1px solid #ddd;}
-#custom ul.recent-postcat li.the-sidefeat-thumbnail img:hover {background:white none;padding:3px;border:1px solid #ccc;}
-ul.recent-postcat li.the-sidefeat-medium .feat-post-meta {margin: 0;}
-<?php print "</style>";
-}
-add_action('admin_head','dez_add_widget_style_admin_head');
-add_action('wp_head','dez_add_widget_style_head');
-
+add_action('widgets_init','meso_register_custom_widget' );
 
 ?>

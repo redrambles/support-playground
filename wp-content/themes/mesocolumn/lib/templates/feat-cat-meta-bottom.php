@@ -1,5 +1,5 @@
 <?php
-$feat_thumb = dez_get_featured_post_image('<div class="feat-thumb"><a href="'. get_permalink() . '" title="' . the_title_attribute('echo=0') . '">','</a></div>',120, 120, 'alignleft','thumbnail',dez_get_singular_cat('false'),the_title_attribute('echo=0'), false);
+$feat_thumb = dez_get_featured_post_image('<div class="feat-thumb"><a href="'. get_permalink() . '" title="' . the_title_attribute('echo=0') . '">','</a></div>',120, 120, 'alignleft','thumbnail',dez_get_image_alt_text(),the_title_attribute('echo=0'), false);
 $feat_post_thumb = apply_filters('meso_bottom_feat_thumb',$feat_thumb);
 ?>
 
@@ -15,8 +15,6 @@ $feat_post_thumb = apply_filters('meso_bottom_feat_thumb',$feat_thumb);
 <?php do_action('bp_after_feat_meta'); ?>
 
 <?php
-$post_custom_excerpt = get_theme_option('post_custom_excerpt');
-$archive_excerpt = !empty($post_custom_excerpt) ? $post_custom_excerpt : "20";
-if($archive_excerpt != '0' || $archive_excerpt != '') { ?><div class="entry-content feat-content"><?php echo dez_get_custom_the_excerpt( $archive_excerpt,''); ?></div>
-<?php } ?>
+$post_custom_excerpt = get_theme_mod('feat_text_count');
+if($post_custom_excerpt == '0') { } else { ?><div class="entry-content feat-content"><?php echo dez_get_custom_the_excerpt($post_custom_excerpt,''); ?></div><?php } ?>
 </div>

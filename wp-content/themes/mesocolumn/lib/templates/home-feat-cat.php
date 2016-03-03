@@ -1,17 +1,17 @@
 <?php
 global $post;
-$archive_excerpt = get_theme_option('post_custom_excerpt');
+$archive_excerpt = get_theme_mod('post_custom_excerpt');
 
-$featcat1 = get_theme_option('side_feat_cat1');
-$featcat2 = get_theme_option('side_feat_cat2');
-$featcat3 = get_theme_option('side_feat_cat3');
-$featcat4 = get_theme_option('side_feat_cat4');
-$featcat5 = get_theme_option('side_feat_cat5');
-$featcat6 = get_theme_option('side_feat_cat6');
-$featcat7 = get_theme_option('side_feat_cat7');
-$featcat8 = get_theme_option('side_feat_cat8');
-$featcat9 = get_theme_option('side_feat_cat9');
-$featcat10 = get_theme_option('side_feat_cat10');
+$featcat1 = get_theme_mod('side_feat_cat1');
+$featcat2 = get_theme_mod('side_feat_cat2');
+$featcat3 = get_theme_mod('side_feat_cat3');
+$featcat4 = get_theme_mod('side_feat_cat4');
+$featcat5 = get_theme_mod('side_feat_cat5');
+$featcat6 = get_theme_mod('side_feat_cat6');
+$featcat7 = get_theme_mod('side_feat_cat7');
+$featcat8 = get_theme_mod('side_feat_cat8');
+$featcat9 = get_theme_mod('side_feat_cat9');
+$featcat10 = get_theme_mod('side_feat_cat10');
 
 $featcat1_name = get_cat_name($featcat1);
 $featcat2_name = get_cat_name($featcat2);
@@ -24,16 +24,16 @@ $featcat8_name = get_cat_name($featcat8);
 $featcat9_name = get_cat_name($featcat9);
 $featcat10_name = get_cat_name($featcat10);
 
-$featcat1_count = get_theme_option('side_feat_cat1_count');
-$featcat2_count = get_theme_option('side_feat_cat2_count');
-$featcat3_count = get_theme_option('side_feat_cat3_count');
-$featcat4_count = get_theme_option('side_feat_cat4_count');
-$featcat5_count = get_theme_option('side_feat_cat5_count');
-$featcat6_count = get_theme_option('side_feat_cat6_count');
-$featcat7_count = get_theme_option('side_feat_cat7_count');
-$featcat8_count = get_theme_option('side_feat_cat8_count');
-$featcat9_count = get_theme_option('side_feat_cat9_count');
-$featcat10_count = get_theme_option('side_feat_cat10_count');
+$featcat1_count = get_theme_mod('side_feat_cat1_count');
+$featcat2_count = get_theme_mod('side_feat_cat2_count');
+$featcat3_count = get_theme_mod('side_feat_cat3_count');
+$featcat4_count = get_theme_mod('side_feat_cat4_count');
+$featcat5_count = get_theme_mod('side_feat_cat5_count');
+$featcat6_count = get_theme_mod('side_feat_cat6_count');
+$featcat7_count = get_theme_mod('side_feat_cat7_count');
+$featcat8_count = get_theme_mod('side_feat_cat8_count');
+$featcat9_count = get_theme_mod('side_feat_cat9_count');
+$featcat10_count = get_theme_mod('side_feat_cat10_count');
 
 $cat1_count = dez_get_cat_post_count($featcat1);
 $cat2_count = dez_get_cat_post_count($featcat2);

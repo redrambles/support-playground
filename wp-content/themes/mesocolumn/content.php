@@ -1,17 +1,19 @@
 <?php
 global $postcount;        
 
-$post_custom_excerpt = get_theme_option('post_custom_excerpt');
-$post_excerpt_moretext = get_theme_option('post_excerpt_moretext');
-$post_blog_style = get_theme_option('blogpost_style');
+$post_custom_excerpt = get_theme_mod('post_custom_excerpt');
+$post_excerpt_moretext = get_theme_mod('post_excerpt_moretext');
+$post_blog_style_check = get_theme_mod('blogpost_style');
+
 
 $archive_excerpt = empty($post_custom_excerpt) ? '30' : $post_custom_excerpt;
 $excerpt_moretext = empty($post_excerpt_moretext) ? 'Continue Reading' : $post_excerpt_moretext;
+$post_blog_style = empty($post_blog_style_check) ? 'default' : $post_blog_style_check;
 
 $oddpost = 'alt-post'; $postcount = 1;
 
-$feat_size = get_theme_option('feat_img_size');
-$feat_size = isset($feat_size) ? $feat_size : 'thumbnail';
+$feat_size_check = get_theme_mod('feat_img_size');
+$feat_size = !empty($feat_size_check) ? $feat_size_check : 'thumbnail';
 $feat_size = apply_filters('meso_thumb_size', $feat_size);
 
 $thumb_w = get_option($feat_size.'_size_w');

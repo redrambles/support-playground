@@ -30,8 +30,8 @@
 
 <div class="post-content">
 
-<?php $get_ads_single_top = get_theme_option('ads_single_top'); if($get_ads_single_top != '') { ?>
-<div class="adsense-single"><?php echo stripcslashes(do_shortcode($get_ads_single_top)); ?></div>
+<?php $get_ads_single_top = get_theme_mod('ads_single_top'); if($get_ads_single_top != '') { ?>
+<div class="adsense-single adtop"><?php echo stripcslashes(do_shortcode($get_ads_single_top)); ?></div>
 <?php } ?>
 
 <div class="entry-content" <?php do_action('bp_article_post_content'); ?>>
@@ -39,13 +39,9 @@
 </div>
 <?php wp_link_pages('before=<div id="page-links">&after=</div>'); ?>
 
-<?php $get_ads_single_bottom = get_theme_option('ads_single_bottom'); if($get_ads_single_bottom != '') { ?>
-<div class="adsense-single"><?php echo stripcslashes(do_shortcode($get_ads_single_bottom)); ?></div>
+<?php $get_ads_single_bottom = get_theme_mod('ads_single_bottom'); if($get_ads_single_bottom != '') { ?>
+<div class="adsense-single adbottom"><?php echo stripcslashes(do_shortcode($get_ads_single_bottom)); ?></div>
 <?php } ?>
-
-<?php if( get_post_type() != 'post' && get_post_type() != 'page' ): ?>
-<?php echo the_taxonomies('before=<span class="post-category">&after=</span>'); ?>
-<?php endif; ?>
 
 </div>
 
@@ -53,8 +49,7 @@
 
 <?php get_template_part( 'lib/templates/post-meta', 'bottom' ); ?>
 
-<?php
-$get_related = get_theme_option('related_on'); if($get_related == 'Enable'):
+<?php $get_related = get_theme_mod('related_on'); if($get_related == 'enable'):
 get_template_part( 'lib/templates/related' );
 endif
 ?>
@@ -69,7 +64,7 @@ endif
 <?php endwhile; ?>
 
 <?php
-$get_author_bio = get_theme_option('author_bio_on'); if($get_author_bio == 'Enable'):
+$get_author_bio = get_theme_mod('author_bio_on'); if($get_author_bio == 'enable'):
 get_template_part( 'lib/templates/author-bio' );
 endif
 ?>

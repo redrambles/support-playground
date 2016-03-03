@@ -1,11 +1,5 @@
 <?php get_header();
-$getsinglecat = get_query_var('cat');
-if($getsinglecat) {
-$singlecat = get_category ($getsinglecat);
-$catslug = $singlecat->slug;
-$getcategoryslug = get_category_by_slug($catslug);
-$cat_id = $getcategoryslug->term_id;
-}
+$cat_id = get_queried_object()->term_id;
 ?>
 
 <?php do_action( 'bp_before_content' ) ?>
@@ -17,7 +11,7 @@ $cat_id = $getcategoryslug->term_id;
 <?php do_action( 'bp_before_blog_home' ) ?>
 
 <!-- POST ENTRY START -->
-<div id="post-entry" class="archive_tn_cat_color_<?php echo dez_get_strip_variable($cat_id); ?>">
+<div id="post-entry" class="archive_tn_cat_color_<?php echo $cat_id; ?>">
 <div class="post-entry-inner">
 
 <?php do_action( 'bp_before_blog_entry' ); ?>

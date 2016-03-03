@@ -95,20 +95,60 @@ a.shipping-calculator-button {font-size:15px;}
 add_action('wp_head','meso_jigo_default_style');
 
 
-if( get_theme_option('custom_shop') == 'Enable' ) {
-remove_action( 'wp_head', 'meso_jigo_default_style', 10);
+function meso_jigoshop_run_custom_shop_check() {
+// add hooks if custom shop enabled
+if( get_theme_mod('custom_shop') == 'enable' ) {
 remove_action( 'jigoshop_after_shop_loop_item_title' , 'jigoshop_template_loop_price', 10);
 remove_action( 'jigoshop_after_shop_loop_item', 'jigoshop_template_loop_add_to_cart', 10);
-
 add_action('jigoshop_after_shop_loop_item','meso_jigo_add_post_right_div_start',10,2);
 add_action('jigoshop_after_shop_loop_item','jigoshop_template_loop_price',11,2);
 add_action('jigoshop_after_shop_loop_item','meso_jigo_add_post_right_div_content',12,2);
 add_action('jigoshop_after_shop_loop_item','jigoshop_template_loop_add_to_cart', 13,2);
 add_action('jigoshop_after_shop_loop_item','meso_jigo_add_post_right_div_end',99,2);
-
 remove_action( 'jigoshop_before_shop_loop_item_title', 'jigoshop_template_loop_product_thumbnail', 10);
 add_action( 'jigoshop_before_shop_loop_item_title', 'meso_jigo_template_loop_product_thumbnail', 10);
-
 }
+}
+add_action('wp_head','meso_jigoshop_run_custom_shop_check');
+
+
+function meso_jigoshop_run_style_check() {
+// add hooks if custom shop enabled
+if( get_theme_mod('custom_shop') == 'enable' ) {
+remove_action( 'wp_head', 'meso_jigo_default_style', 10);
+}
+}
+add_action('init','meso_jigoshop_run_style_check');
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Load Theme Styles and Javascripts
+///////////////////////////////////////////////////////////////////////////////
+/*---------------------------load styles--------------------------------------*/
+function meso_theme_load_jigo_styles() {
+global $theme_version;
+if ( get_theme_mod('custom_shop') == 'enable' ) {
+wp_enqueue_style( 'custom-jigoshop-css', get_template_directory_uri() . '/lib/jigoshop/jigoshop-theme-css.css', array(), $theme_version );
+}
+}
+add_action( 'wp_enqueue_scripts', 'meso_theme_load_jigo_styles' );
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Load Woocommerce Widgets
+///////////////////////////////////////////////////////////////////////////////
+function meso_jigo_theme_widgets_init() {
+     register_sidebar(array(
+    'name'=>__('Shop Sidebar', 'mesocolumn'),
+    'id' => 'shop-sidebar',
+	'description' => __( 'Widget area for Jigo Shop Pages', 'mesocolumn' ),
+	'before_widget' => '<aside id="%1$s" class="widget %2$s">',
+	'after_widget' => '</aside>',
+	'before_title' => '<h3 class="widget-title">',
+	'after_title' => '</h3>',
+	));
+}
+add_action( 'widgets_init', 'meso_jigo_theme_widgets_init', 20 );
 
 ?>

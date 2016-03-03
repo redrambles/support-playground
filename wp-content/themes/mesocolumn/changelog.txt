@@ -1,6 +1,28 @@
 /////////////////////////////////////////
 //changelog
 /////////////////////////////////////////
+v1.6.5
+- tested with WordPress 4.4.1
+- tested with PHP7 and reconstruct custom functions
+- customizer now fully supported
+- updated Google web fonts listing
+- remove theme options. now using customizer api setting
+- remove category color options. now on posts->category or taxonomy->edit category color
+- remove page color options. now on edit page->page color option
+- remove get_theme_option(), using faster setting query with get_theme_mod()
+- remove 'sidebar banner setting' in new customizer setting
+- remove dropdown mobile menu and added new mobile custom menu
+- fixed image alt did not follow image alt text options in media setting
+- fixed post author link with space in url
+- fixed homepage featured category messed up if slider did not show up
+- fixed top header advertisement shortcode issue
+- new option for text count in homepage featured category
+- new option to enable and disable first image grab for featured thumbnails
+- new option separating article and breadcrumb schema options
+- new custom post type multi widget
+- new faq.txt
+
+
 v1.6.4.1
 - fixed woocommerce function error after update woocommerce v2.3.2
 

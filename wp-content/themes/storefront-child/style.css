@@ -1,0 +1,13 @@
+/*
+ * Theme Name:     Storefront Child
+ * Description:    Storefront Child Theme
+ * Template:       storefront
+ * Version:        1.0.0
+*/
+
+
+@import url("../storefront/style.css");
+
+body {
+	background-color: tomato;
+}
